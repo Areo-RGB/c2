@@ -180,25 +180,16 @@ export default function Content() {
 
             {/* Content Container */}
             <div className="rounded-lg p-5 border border-border bg-background shadow-sm">
-              {/* Exercise Header with title and dropdown */}
+              {/* Exercise Header with dropdown */}
               <div className="mb-5">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className={cn(
-                    "text-sm font-medium",
-                    colorClasses.icon
-                  )}>
-                    Ranking
-                  </h3>
-                </div>
-                
-                {/* Exercise Selector Below Title */}
+                {/* Exercise Selector */}
                 <Select 
                   value={selectedExerciseId} 
                   onValueChange={setSelectedExerciseId}
                 >
                   <SelectTrigger 
                     className={cn(
-                      "w-full h-9 text-sm mb-2", 
+                      "w-full h-9 text-sm", 
                       colorClasses.icon
                     )}
                   >
