@@ -2,6 +2,10 @@
   "name": "shadcn-admin",
   "private": false,
   "version": "1.3.0",
+  "engines": {
+    "node": "22.x",
+    "pnpm": "10.x"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
