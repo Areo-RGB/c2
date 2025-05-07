@@ -4,7 +4,6 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { FocusCards } from '@/components/ui/focus-cards'
-import videoSource from '@/assets/g.mp4'
 import portraitImage from '@/assets/Finley_portrait.png'
 
 export default function Apps() {
@@ -18,12 +17,12 @@ export default function Apps() {
     {
       title: "Analytics Dashboard",
       src: portraitImage,
-      videoSrc: videoSource,
+      videoSrc: "https://data3.fra1.cdn.digitaloceanspaces.com/g.mp4",
     },
     {
       title: "Task Management",
       src: portraitImage,
-      videoSrc: videoSource,
+      videoSrc: "https://data3.fra1.cdn.digitaloceanspaces.com/g.mp4",
     },
   ]
 
