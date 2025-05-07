@@ -53,7 +53,6 @@ export const sidebarData: SidebarData = {
         {
           title: 'Statistiken',
           url: '/statistiken',
-          badge: '3',
           icon: IconMessages,
         },
         {
