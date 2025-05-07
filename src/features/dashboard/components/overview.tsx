@@ -51,16 +51,6 @@ const data = [
   },
 ]
 
-const CustomTooltip = ({ active, payload }: any) => {
-  if (active && payload && payload.length) {
-    const formattedValue = (value: number) => {
-      return `${value.toFixed(2)}%`;
-    };
-    // ... rest of the code ...
-  }
-  return null;
-};
-
 export function Overview() {
   return (
     <ResponsiveContainer width='100%' height={350}>

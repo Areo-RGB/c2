@@ -4,9 +4,7 @@ import { useState, useMemo } from "react"
 import { cn } from "@/lib/utils"
 import { Film, X, Info, ChevronDown, ChevronUp } from "lucide-react"
 import type { PerformanceRankingProps } from "@/types/performance"
-import type { ButtonVideoMapping } from "@/types/videos"
 import {
-  getVideoMappingsForExercise,
   estimatePlayerPercentile,
   getPerformanceCategory,
   getGradientColor,
@@ -29,9 +27,6 @@ export default function PerformanceRanking({
   const [currentVideoItem, setCurrentVideoItem] = useState<number | null>(null)
   const [currentVideoUrl, setCurrentVideoUrl] = useState<string | null>(null)
   const [showCategoryLegend, setShowCategoryLegend] = useState(false)
-
-  // Get video mappings for this exercise using the title prop as the key
-  // const videoMappings: ButtonVideoMapping[] = useMemo(() => getVideoMappingsForExercise(title), [title])
 
   // Sort data based on result
   const sortedData = [...data].sort((a, b) => {
