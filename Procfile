@@ -1,1 +1,1 @@
-web: NODE_ENV=production pnpm install && pnpm build && npx serve dist -l ${PORT:-8080} 
+web: npx serve dist -l ${PORT} 
