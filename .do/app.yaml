@@ -6,10 +6,12 @@ services:
       branch: main
       repo_clone_url: ${GITHUB_REPOSITORY}
     build_command: pnpm build
-    run_command: pnpm preview
+    run_command: npx serve dist -l $PORT
     envs:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: "8080"
     instance_count: 1
     instance_size_slug: basic-xxs
     source_dir: / 

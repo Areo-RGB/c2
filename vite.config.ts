@@ -13,11 +13,16 @@ export default defineConfig({
   ],
   preview: {
     port: Number(process.env.PORT) || 8080,
-    host: '0.0.0.0'
+    host: true,
+    strictPort: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*'
+    }
   },
   server: {
     port: Number(process.env.PORT) || 8080,
-    host: '0.0.0.0'
+    host: true,
+    strictPort: true
   },
   resolve: {
     alias: {
