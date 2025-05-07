@@ -4,16 +4,21 @@ import react from '@vitejs/plugin-react-swc'
 import tailwindcss from '@tailwindcss/vite'
 import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({
-      target: 'react',
-      autoCodeSplitting: true,
-    }),
     react(),
+    TanStackRouterVite(),
     tailwindcss(),
   ],
+  preview: {
+    port: Number(process.env.PORT) || 8080,
+    host: '0.0.0.0'
+  },
+  server: {
+    port: Number(process.env.PORT) || 8080,
+    host: '0.0.0.0'
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
