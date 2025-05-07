@@ -31,7 +31,7 @@ export default function PerformanceRanking({
   const [showCategoryLegend, setShowCategoryLegend] = useState(false)
 
   // Get video mappings for this exercise using the title prop as the key
-  const videoMappings: ButtonVideoMapping[] = useMemo(() => getVideoMappingsForExercise(title), [title])
+  // const videoMappings: ButtonVideoMapping[] = useMemo(() => getVideoMappingsForExercise(title), [title])
 
   // Sort data based on result
   const sortedData = [...data].sort((a, b) => {
