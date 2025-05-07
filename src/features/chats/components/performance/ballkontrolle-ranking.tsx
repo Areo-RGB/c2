@@ -1,0 +1,17 @@
+import { getExerciseData } from "@/features/chats/data/data"
+import PerformanceRanking from "./performance-ranking"
+
+export default function BallkontrolleRanking({ className }: { className?: string }) {
+  const data = getExerciseData("Ballkontrolle")
+
+  return (
+    <PerformanceRanking
+      title="Ballkontrolle"
+      displayTitle="Ballkontrolle Rankings"
+      data={data}
+      className={className}
+      unit="s"
+      sortAscending={true}
+    />
+  )
+} 

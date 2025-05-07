@@ -1,0 +1,15 @@
+name: shadcn-admin
+region: fra
+services:
+  - name: web
+    git:
+      branch: main
+      repo_clone_url: ${GITHUB_REPOSITORY}
+    build_command: pnpm build
+    run_command: pnpm preview
+    envs:
+      - key: NODE_ENV
+        value: production
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    source_dir: / 
