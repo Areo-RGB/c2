@@ -1,1 +1,1 @@
-web: pnpm preview 
+web: pnpm install && pnpm build && pnpm preview --host 0.0.0.0 --port $PORT 
