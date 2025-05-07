@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { cn } from "@/lib/utils"
-import { Film, X, Info, ChevronDown, ChevronUp } from "lucide-react"
+import { Film, X, ChevronDown, ChevronUp } from "lucide-react"
 import type { PerformanceRankingProps } from "@/types/performance"
 import {
   estimatePlayerPercentile,
@@ -161,9 +161,10 @@ export default function PerformanceRanking({
         "p-5 transition-all duration-300",
         isPlayingVideo ? "relative z-20" : ""
       )}>
-        <div className="flex items-center justify-between mb-4 transition-all duration-300">
+        {/* Title and legend control in separate rows */}
+        <div className="mb-4 transition-all duration-300">
           <h2 className={cn(
-            "text-sm font-semibold flex items-center transition-colors duration-300", 
+            "text-sm font-semibold flex items-center transition-colors duration-300 mb-2", 
             isPlayingVideo ? "text-white" : "text-card-foreground"
           )}>
             <span className="w-1.5 h-1.5 rounded-full bg-primary mr-2"></span>
@@ -171,36 +172,26 @@ export default function PerformanceRanking({
           </h2>
           
           {/* Only show controls when video is not playing */}
-          <div className={cn(
-            "flex flex-wrap items-center gap-2 gap-y-1 transition-all duration-300",
-            !isPlayingVideo ? "opacity-100" : "opacity-0 invisible h-0"
-          )}>
-            <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full border-2 border-muted-foreground"></div>
-              <span className="text-xs text-muted-foreground">Benchmark</span>
+          {!isPlayingVideo && (
+            <div className="flex justify-start">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation() // Prevent click from propagating
+                  setShowCategoryLegend(!showCategoryLegend)
+                }}
+                className="text-xs flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showCategoryLegend ? "Hide" : "Show"} Legend
+                {showCategoryLegend ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+              </button>
             </div>
-            <div className="flex items-center gap-1">
-              <div className="w-3 h-3 rounded-full border-2 border-primary"></div>
-              <span className="text-xs text-muted-foreground">Player</span>
-            </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation() // Prevent click from propagating
-                setShowCategoryLegend(!showCategoryLegend)
-              }}
-              className="text-xs flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <Info className="w-3 h-3" />
-              {showCategoryLegend ? "Hide" : "Show"}
-              {showCategoryLegend ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-            </button>
-          </div>
+          )}
         </div>
 
-        {/* Gradient Legend - only show when video is not playing */}
+        {/* Simplified Gradient Legend - only show when video is not playing */}
         {showCategoryLegend && !isPlayingVideo && (
           <div 
-            className="mb-4 p-3 bg-muted/50 rounded-lg text-xs border border-border/50 animate-in slide-in-from-top duration-300"
+            className="mb-4 p-3 bg-card/50 rounded-lg text-xs border border-border/50 animate-in slide-in-from-top duration-300"
             onClick={(e) => e.stopPropagation()} // Prevent legend clicks from toggling video
           >
             <div className="font-medium mb-2 text-card-foreground">Leistungskategorien:</div>
@@ -238,7 +229,7 @@ export default function PerformanceRanking({
 
             // Determine border color based on percentile
             let borderColorClass = "border-muted-foreground/40"
-            if (!isBenchmark && percentile !== null) {
+            if (percentile !== null && !isBenchmark) {
               if (percentile < 31) borderColorClass = "border-red-600/60"
               else if (percentile < 71) borderColorClass = "border-orange-500/60"
               else if (percentile < 81) borderColorClass = "border-yellow-500/60"
@@ -246,13 +237,15 @@ export default function PerformanceRanking({
               else borderColorClass = "border-green-600/60"
             }
 
-            const isActive = currentVideoItem === sortedData.indexOf(item)
-            
-            // Calculate display index - important for numbering when filtering
+            // Get display index - important for numbering when filtering
             const displayIndex = sortedData
               .filter(i => !isPlayingVideo || !i.name.startsWith("DFB"))
               .indexOf(item)
-
+            
+            // Get actual index for video handling
+            const actualIndex = sortedData.indexOf(item)
+            const isActive = currentVideoItem === actualIndex
+            
             return (
               <div
                 key={`${item.name}-${index}`}
@@ -269,11 +262,12 @@ export default function PerformanceRanking({
                 )}
                 onClick={(e) => {
                   e.stopPropagation() // Prevent clicks from bubbling to parent
-                  const itemIndex = sortedData.indexOf(item)
-                  handleToggleVideo(itemIndex)
+                  if (!isBenchmark) { // Only allow videos for players, not benchmarks
+                    handleToggleVideo(actualIndex)
+                  }
                 }}
               >
-                {/* Gradient Indicator - only for player entries */}
+                {/* Gradient Indicator - show for both player and benchmark entries */}
                 {!isBenchmark && (
                   <div
                     className={`absolute left-0 top-0 bottom-0 w-1 ${indicatorColor} rounded-l-lg transition-all duration-300`}
