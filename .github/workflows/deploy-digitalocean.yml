@@ -7,6 +7,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DIGITALOCEAN_ACCESS_TOKEN: dop_v1_e1b4de15743f1ae31dop_v1_e1b4de15743f1ae3146734084d55445b397ea8c0d9ae1ea1d01429c80a3627d646734084d55445b397ea8c0d9ae1ea1d01429c80a3627d6
+      DIGITALOCEAN_APP_ID: jellyfish-app
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -32,8 +35,8 @@ jobs:
       - name: Install doctl
         uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+          token: ${{ env.DIGITALOCEAN_ACCESS_TOKEN }}
 
       - name: Deploy to DigitalOcean App Platform
         run: |
-          doctl apps create-deployment ${{ secrets.DIGITALOCEAN_APP_ID }} 
+          doctl apps create-deployment ${{ env.DIGITALOCEAN_APP_ID }} 

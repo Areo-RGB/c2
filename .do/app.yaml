@@ -1,4 +1,4 @@
-name: shadcn-admin
+name: jellyfish-app
 region: fra
 services:
   - name: web
