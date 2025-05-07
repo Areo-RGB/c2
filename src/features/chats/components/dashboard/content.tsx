@@ -1,12 +1,7 @@
 "use client"
 
 import { Zap, Activity, Brain } from "lucide-react"
-import Sprint10mRanking from "../performance/sprint-10m-ranking"
-import Sprint20mRanking from "../performance/sprint-20m-ranking"
-import GewandtheitRanking from "../performance/gewandtheit-ranking"
-import DribblingRanking from "../performance/dribbling-ranking"
-import BallkontrolleRanking from "../performance/ballkontrolle-ranking"
-import BalljonglierenRanking from "../performance/balljonglieren-ranking"
+import PerformanceCardNavigation from "../performance/performance-card-navigation"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 
 export default function Content() {
@@ -47,22 +42,21 @@ export default function Content() {
             </TabsList>
 
             <TabsContent value="schnelligkeit" className="space-y-6 animate-in fade-in-50 duration-300">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Sprint10mRanking />
-                <Sprint20mRanking />
+              <div className="max-w-xl mx-auto">
+                <PerformanceCardNavigation category="schnelligkeit" />
               </div>
             </TabsContent>
 
             <TabsContent value="beweglichkeit" className="space-y-6 animate-in fade-in-50 duration-300">
-              <GewandtheitRanking />
+              <div className="max-w-xl mx-auto">
+                <PerformanceCardNavigation category="beweglichkeit" />
+              </div>
             </TabsContent>
 
             <TabsContent value="technik" className="space-y-6 animate-in fade-in-50 duration-300">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <DribblingRanking />
-                <BallkontrolleRanking />
+              <div className="max-w-xl mx-auto">
+                <PerformanceCardNavigation category="technik" />
               </div>
-              <BalljonglierenRanking />
             </TabsContent>
           </Tabs>
         </div>
