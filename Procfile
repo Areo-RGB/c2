@@ -1,1 +1,1 @@
-web: pnpm install && pnpm build && PORT=$PORT pnpm preview 
+web: NODE_ENV=production PORT=$PORT pnpm preview 
