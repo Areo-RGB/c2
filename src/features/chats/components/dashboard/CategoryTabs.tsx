@@ -1,6 +1,5 @@
 "use client";
 
-import React from 'react';
 import { Zap, Activity, Brain } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type CategoryType } from "../../data/exercises.tsx";

@@ -1,6 +1,5 @@
 "use client"
 
-import { Zap, Activity, Brain } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { 
   Select,

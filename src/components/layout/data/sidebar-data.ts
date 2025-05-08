@@ -1,9 +1,5 @@
 import {
-  IconChecklist,
   IconLayoutDashboard,
-  IconMessages,
-  IconPackages,
-  IconUsers,
 } from '@tabler/icons-react'
 import { AudioWaveform, Command, GalleryVerticalEnd, Video, BarChart } from 'lucide-react'
 import { type SidebarData } from '../types'
