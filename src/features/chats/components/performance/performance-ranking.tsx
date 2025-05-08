@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect } from "react"
 import { cn } from "@/lib/utils"
 import { Film, X, ChevronDown, Clock, ArrowUp, ArrowDown, ArrowRight } from "lucide-react"
-import type { PerformanceRankingProps } from "@/types/performance"
 import {
   estimatePlayerPercentile,
   getPerformanceCategory,
@@ -15,6 +14,35 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+export interface Exercise {
+  id: string;
+  title: string;
+}
+
+export interface PerformanceData {
+  name: string;
+  ergebnis: number | string;
+  kategorie?: string;
+}
+
+export interface PerformanceRankingProps {
+  title: string;
+  displayTitle?: string;
+  data: PerformanceData[];
+  className?: string;
+  unit?: string;
+  sortAscending?: boolean;
+  onExerciseChange?: (exercise: string) => void;
+  availableExercises?: Exercise[];
+}
 
 /**
  * PerformanceRanking component displays a ranking of performance data
@@ -27,6 +55,8 @@ export default function PerformanceRanking({
   className,
   unit = "s",
   sortAscending = true,
+  onExerciseChange,
+  availableExercises = [],
 }: PerformanceRankingProps) {
   const [isPlayingVideo, setIsPlayingVideo] = useState(false)
   const [currentVideoItem, setCurrentVideoItem] = useState<number | null>(null)
@@ -139,32 +169,53 @@ export default function PerformanceRanking({
 
   // Create a mapping of videos for each data item
   const itemVideoMap = useMemo(() => {
-    // Default mapping uses the external video for all items
     const defaultMap: Record<number, string> = {}
     
-    // Map each item to a video based on specific categories
+    // Map each item to a video based on player and exercise
     sortedData.forEach((item, index) => {
       // Default fallback video
       defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/g.mp4"
       
-      // Use specific videos for specific categories
-      if (title === "20m Sprint" || 
-          item.name.toLowerCase().includes("sprint") || 
-          item.kategorie?.toLowerCase().includes("sprint")) {
-        // 20m sprint video
-        defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/20.mp4"
-      } 
-      else if (title === "Balljonglieren" || 
-               item.name.toLowerCase().includes("ball") || 
-               item.kategorie?.toLowerCase().includes("ball")) {
-        // Ball juggling video
-        defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/6%20(2).mp4"
+      // Alex's videos
+      if (item.name === "Alex") {
+        if (title === "10m Sprint") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/Timeline%201sprint.bent_prob4_tvai.mp4"
+        } else if (title === "20m Sprint") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/20.mp4"
+        } else if (title === "Balljonglieren") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/6%20(2).mp4"
+        } else if (title === "Dribbling") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/2%20-%20(1x1)_3.mp4"
+        }
       }
-      else if (title === "Dribbling" || 
-               item.name.toLowerCase().includes("dribb") || 
-               item.kategorie?.toLowerCase().includes("dribb")) {
-        // Dribbling video
-        defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/2%20-%20(1x1)_3.mp4"
+      
+      // Bent's videos
+      else if (item.name === "Bent") {
+        if (title === "Balljonglieren") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/bent1/bent.jong.mp4"
+        } else if (title === "10m Sprint" || title === "20m Sprint") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/bent1/lirdy.mp4"
+        } else if (title === "Dribbling") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/2%20-%20(1x1)_3.mp4"
+        }
+      }
+      
+      // Finley's videos
+      else if (item.name === "Finley") {
+        if (title === "10m Sprint") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/Finley.Time/finley.gw.mp4"
+        }
+      }
+      
+      // Other players' default exercise videos
+      else {
+        if (title === "10m Sprint" || title === "20m Sprint") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/20.mp4"
+        } else if (title === "Balljonglieren") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/6%20(2).mp4"
+        } else if (title === "Dribbling") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/2%20-%20(1x1)_3.mp4"
+        }
       }
     })
     
@@ -236,6 +287,7 @@ export default function PerformanceRanking({
         "shadow-md",
         "relative",
         "overflow-hidden",
+        "min-h-[350px] h-[calc(100vh-8rem)] max-h-[844px]",
         className,
       )}
     >
@@ -244,51 +296,70 @@ export default function PerformanceRanking({
 
       {/* Video Overlay - Full component dimensions */}
       {isPlayingVideo && currentVideoUrl && (
-        <div className="absolute inset-0 z-10 overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+        <div className="absolute inset-0 z-10 overflow-hidden">
           <video
             src={currentVideoUrl}
             autoPlay
             playsInline
             className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/60 animate-in fade-in duration-500"></div>
         </div>
       )}
 
       {/* Card Content */}
       <div className={cn(
-        "p-5 transition-all duration-300",
-        isPlayingVideo ? "relative z-5" : ""
+        isPlayingVideo ? "relative z-20 h-full" : "p-3 sm:p-4 h-full",
       )}>
-        {/* Close video button (fixed position) */}
+        {/* Close video button */}
         {isPlayingVideo && (
           <button 
             onClick={(e) => {
-              e.stopPropagation() // Prevent click from propagating to parent
+              e.stopPropagation()
               setIsPlayingVideo(false)
               setCurrentVideoItem(null)
               setCurrentVideoUrl(null)
             }}
-            className="absolute top-2 right-2 p-1.5 rounded-full bg-black/70 hover:bg-black/90 text-white z-20 transition-colors shadow-md"
+            className="absolute top-2 sm:top-3 right-2 sm:right-3 p-2 sm:p-2.5 rounded-full bg-black/80 hover:bg-black/95 text-white z-20"
             aria-label="Close video"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
         )}
 
-        {/* Title and legend control in separate rows */}
-        <div className="mb-4 transition-all duration-300">
+        {/* Title section */}
+        <div className={cn(
+          isPlayingVideo ? "px-3 sm:px-4 py-2 sm:py-3" : "mb-4"
+        )}>
           <div className="flex items-center justify-between">
-            <h2 className={cn(
-              "text-sm font-semibold transition-colors duration-300", 
-              isPlayingVideo ? "text-white" : "text-card-foreground"
-            )}>
-              {displayTitle || title}
-            </h2>
+            {/* Exercise Selection */}
+            <Select
+              value={title}
+              onValueChange={(value) => {
+                if (onExerciseChange) {
+                  onExerciseChange(value)
+                }
+              }}
+            >
+              <SelectTrigger
+                className={cn(
+                  "w-[140px] sm:w-[180px] h-7 sm:h-8 text-xs sm:text-sm",
+                  isPlayingVideo ? "text-white [text-shadow:_0_1px_1px_rgb(0_0_0_/_90%)]" : "text-card-foreground"
+                )}
+              >
+                <SelectValue>{displayTitle || title}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                {availableExercises.map((exercise) => (
+                  <SelectItem key={exercise.id} value={exercise.title}>
+                    {exercise.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             
             {/* Show date indicator when viewing previous ranking */}
             {showPreviousRanking && (
-              <div className="flex items-center px-2 py-1 rounded-full bg-muted text-xs font-medium text-muted-foreground">
+              <div className="flex items-center px-2 py-1 rounded-full bg-muted text-[10px] sm:text-xs font-medium text-muted-foreground">
                 <Clock className="w-3 h-3 mr-1.5" />
                 {previousRankingDate}
               </div>
@@ -301,14 +372,14 @@ export default function PerformanceRanking({
               <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                 <PopoverTrigger asChild>
                   <button
-                    className="text-xs flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+                    className="text-[10px] sm:text-xs flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     Entwicklung
-                    <ChevronDown className="w-3 h-3" />
+                    <ChevronDown className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                   </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <div className="text-xs">
+                  <div className="text-[10px] sm:text-xs">
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
@@ -317,7 +388,7 @@ export default function PerformanceRanking({
                       }}
                       className="flex items-center gap-2 px-3 py-2 hover:bg-muted transition-colors w-full text-left"
                     >
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       <span>Vergleich mit {previousRankingDate}</span>
                     </button>
                   </div>
@@ -487,11 +558,13 @@ export default function PerformanceRanking({
 
         {/* Performance Data List */}
         <div className={cn(
-          "space-y-2 relative min-h-[240px]",
+          "space-y-1.5 sm:space-y-2 relative",
+          isPlayingVideo 
+            ? "absolute bottom-0 left-0 right-0 h-[160px] sm:h-[180px] overflow-y-auto p-3 sm:p-4 [&_*]:text-white [&_*]:[text-shadow:_0_1px_1px_rgb(0_0_0_/_90%)]"
+            : "h-[calc(100%-2rem)] overflow-y-auto",
           showComparisonOverlay ? "opacity-20 pointer-events-none" : ""
         )}>
           {displayData
-            // Filter out benchmarks when video is playing
             .filter(item => !isPlayingVideo || !item.name.startsWith("DFB"))
             .map((item, index) => {
             const isBenchmark = item.name.startsWith("DFB")
