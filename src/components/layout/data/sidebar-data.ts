@@ -46,16 +46,6 @@ export const sidebarData: SidebarData = {
           icon: IconChecklist,
         },
         {
-          title: 'Apps',
-          url: '/apps',
-          icon: IconPackages,
-        },
-        {
-          title: 'Statistiken',
-          url: '/statistiken',
-          icon: IconMessages,
-        },
-        {
           title: 'Users',
           url: '/users',
           icon: IconUsers,
