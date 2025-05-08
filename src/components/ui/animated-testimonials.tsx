@@ -2,7 +2,6 @@
  
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "motion/react";
- 
 import { useEffect, useState } from "react";
  
 type Testimonial = {
@@ -54,7 +53,7 @@ export const AnimatedTestimonials = ({
     <div className="mx-auto max-w-sm px-4 py-20 font-sans antialiased md:max-w-4xl md:px-8 lg:px-12">
       <div className="relative grid grid-cols-1 gap-20 md:grid-cols-2">
         <div>
-          <div className="relative h-80 w-full">
+          <div className="relative h-[420px] w-[300px] mx-auto">
             <AnimatePresence>
               {testimonials.map((testimonial, index) => (
                 <motion.div
@@ -88,14 +87,48 @@ export const AnimatedTestimonials = ({
                   className="absolute inset-0 origin-bottom"
                   onClick={() => handleImageClick(index)}
                 >
-                  <img
-                    src={testimonial.src}
-                    alt={testimonial.name}
-                    width={500}
-                    height={500}
-                    draggable={false}
-                    className="h-full w-full rounded-3xl object-cover object-center cursor-pointer"
-                  />
+                  <div className="h-full w-full overflow-hidden rounded-2xl border-4 border-white shadow-xl dark:border-neutral-800 flex flex-col bg-gradient-to-br from-slate-50 to-slate-200 dark:from-neutral-900 dark:to-neutral-800">
+                    <div className="relative h-[80%] w-full overflow-hidden">
+                      <img
+                        src={testimonial.src}
+                        alt={testimonial.name}
+                        width={500}
+                        height={500}
+                        draggable={false}
+                        className="h-full w-full object-cover object-center cursor-pointer"
+                      />
+                      {isActive(index) && (
+                        <div className="absolute top-3 right-3 flex gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handlePrev();
+                            }}
+                            className="group/button flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm hover:bg-white dark:bg-black/60 dark:hover:bg-black/80"
+                          >
+                            <IconArrowLeft className="h-5 w-5 text-neutral-700 transition-transform duration-300 group-hover/button:rotate-12 dark:text-neutral-300" />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleNext();
+                            }}
+                            className="group/button flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm hover:bg-white dark:bg-black/60 dark:hover:bg-black/80"
+                          >
+                            <IconArrowRight className="h-5 w-5 text-neutral-700 transition-transform duration-300 group-hover/button:-rotate-12 dark:text-neutral-300" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 text-center flex-1 flex flex-col justify-center bg-gradient-to-b from-transparent to-gray-100 dark:to-neutral-800">
+                      <h3 className="text-xl font-bold text-neutral-800 dark:text-white">
+                        {testimonial.name}
+                      </h3>
+                      <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
+                        {testimonial.designation}
+                      </p>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -120,13 +153,8 @@ export const AnimatedTestimonials = ({
               duration: 0.2,
               ease: "easeInOut",
             }}
+            className="flex flex-col items-center text-center"
           >
-            <h3 className="text-2xl font-bold text-black dark:text-white">
-              {testimonials[active].name}
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-neutral-500">
-              {testimonials[active].designation}
-            </p>
             <motion.p className="mt-8 text-lg text-gray-500 dark:text-neutral-300">
               {testimonials[active].quote.split(" ").map((word, index) => (
                 <motion.span
@@ -153,20 +181,6 @@ export const AnimatedTestimonials = ({
               ))}
             </motion.p>
           </motion.div>
-          <div className="flex gap-4 pt-12 md:pt-0">
-            <button
-              onClick={handlePrev}
-              className="group/button flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-800"
-            >
-              <IconArrowLeft className="h-6 w-6 text-black transition-transform duration-300 group-hover/button:rotate-12 dark:text-neutral-400" />
-            </button>
-            <button
-              onClick={handleNext}
-              className="group/button flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 dark:bg-neutral-800"
-            >
-              <IconArrowRight className="h-6 w-6 text-black transition-transform duration-300 group-hover/button:-rotate-12 dark:text-neutral-400" />
-            </button>
-          </div>
         </div>
       </div>
     </div>

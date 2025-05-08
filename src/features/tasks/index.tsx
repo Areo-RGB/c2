@@ -35,7 +35,7 @@ export default function Tasks() {
   return (
     <Main className="h-screen p-0 overflow-auto">
       <div className="container mx-auto py-8">
-        <h1 className="text-3xl font-bold mb-8 text-center">Entwicklung</h1>
+        <h1 className="text-3xl font-bold mb-8 text-center">Spieler</h1>
         
         {showExpandableCard && selectedTestimonialCardType ? (
           <>

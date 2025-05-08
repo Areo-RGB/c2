@@ -560,8 +560,8 @@ export default function PerformanceRanking({
         <div className={cn(
           "space-y-1.5 sm:space-y-2 relative",
           isPlayingVideo 
-            ? "absolute bottom-0 left-0 right-0 h-[240px] sm:h-[280px] overflow-y-auto p-3 sm:p-4 [&_*]:text-white [&_*]:[text-shadow:_0_1px_1px_rgb(0_0_0_/_90%)]"
-            : "h-[calc(100%-2rem)] overflow-y-auto",
+            ? "absolute bottom-0 left-0 right-0 h-[240px] sm:h-[280px] overflow-y-auto p-3 sm:p-4 [&_*]:text-white [&_*]:[text-shadow:_0_1px_1px_rgb(0_0_0_/_90%)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            : "h-[calc(100%-2rem)] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
           showComparisonOverlay ? "opacity-20 pointer-events-none" : ""
         )}>
           {displayData
@@ -618,8 +618,8 @@ export default function PerformanceRanking({
                   !isBenchmark ? "hover:bg-muted/50 cursor-pointer" : "",
                   "relative",
                   isActive && isPlayingVideo ? "bg-white/10 hover:bg-white/20 animate-pulse" : 
-                  isPlayingVideo ? "hover:bg-white/10" : 
-                  index === 0 ? "bg-muted/30" : "",
+                  isPlayingVideo ? "hover:bg-white/10 border border-white/20" : 
+                  isBenchmark ? "" : "bg-muted/30 border border-border/30",
                   isPlayingVideo && !isBenchmark ? "animate-in fade-in slide-in-from-left-5" : "",
                   (animationPhase !== 'none' && item.name === position2CurrentPlayerName) ? 
                     "transition-opacity duration-500" : "transition-colors duration-300",
@@ -649,7 +649,7 @@ export default function PerformanceRanking({
                     isActive && isPlayingVideo 
                       ? "bg-primary text-primary-foreground scale-110" 
                       : isBenchmark 
-                        ? isPlayingVideo ? "bg-white/20 text-white" : "bg-muted/50 text-muted-foreground" 
+                        ? isPlayingVideo ? "bg-transparent text-white" : "bg-transparent text-muted-foreground" 
                         : isPlayingVideo ? "bg-white/20 text-white" : "bg-muted text-card-foreground",
                     "text-sm font-semibold",
                     "group-hover:scale-105",
