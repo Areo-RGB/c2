@@ -11,8 +11,19 @@ export function ExpandableCardDemo() {
   const [active, setActive] = useState<(typeof cards)[number] | boolean | null>(
     null
   );
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
+  
+  // Videos for Finley's card
+  const videos = [
+    "https://data3.fra1.cdn.digitaloceanspaces.com/Finley.Time/Nested%20Sequence%2001%20-%20(4x5).mp4",
+    "https://data3.fra1.cdn.digitaloceanspaces.com/Finley.Time/Timeline%201%20(2).mp4"
+  ];
+  
+  const videoTitles = ["05/2025", "11/2025"];
+  const videoDescriptions = ["Ergebnis", "Ergebnis"];
+  const videoScores = ["7/10", "8/10"];
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -76,20 +87,40 @@ export function ExpandableCardDemo() {
             <motion.div
               layoutId={`card-${active.title}-${id}`}
               ref={ref}
-              className="w-full max-w-[500px]  h-full md:h-fit md:max-h-[90%]  flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
+              className="w-full max-w-[600px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
             >
               {active.videoUrl ? (
-                <motion.div 
-                  layoutId={`video-${active.title}-${id}`}
-                  className="w-full h-[500px] flex justify-center bg-black"
-                >
-                  <video 
-                    controls 
-                    autoPlay 
-                    className="h-full object-contain"
-                    src={active.videoUrl}
-                  />
-                </motion.div>
+                <div className="flex flex-col h-full">
+                  <motion.div 
+                    layoutId={`video-${active.title}-${id}`}
+                    className="w-full h-[650px] flex justify-center bg-black flex-grow"
+                  >
+                    <video 
+                      key={videos[currentVideoIndex]}
+                      controls 
+                      autoPlay 
+                      className="h-full object-contain"
+                      src={videos[currentVideoIndex]}
+                    />
+                  </motion.div>
+                  {videos.length > 1 && (
+                    <div className="flex border-b border-gray-200 dark:border-neutral-700">
+                      {videoTitles.map((title, index) => (
+                        <button
+                          key={title}
+                          onClick={() => setCurrentVideoIndex(index)}
+                          className={`py-3 px-6 font-medium text-sm transition-colors ${
+                            currentVideoIndex === index 
+                              ? "text-green-600 border-b-2 border-green-600 dark:text-green-400 dark:border-green-400" 
+                              : "text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400"
+                          }`}
+                        >
+                          {title}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               ) : (
                 <motion.div layoutId={`image-${active.title}-${id}`}>
                   <img
@@ -102,56 +133,33 @@ export function ExpandableCardDemo() {
                 </motion.div>
               )}
 
-              <div>
-                <div className="flex justify-between items-start p-4">
-                  <div className="">
-                    <motion.h3
-                      layoutId={`title-${active.title}-${id}`}
-                      className="font-bold text-neutral-700 dark:text-neutral-200"
-                    >
-                      {active.title}
-                    </motion.h3>
-                    <motion.p
-                      layoutId={`description-${active.description}-${id}`}
-                      className="text-neutral-600 dark:text-neutral-400"
-                    >
-                      {active.description}
-                    </motion.p>
-                  </div>
-
+              <div className="flex justify-between items-center p-4">
+                <div className="flex items-center">
+                  <motion.h3
+                    layoutId={`title-${active.title}-${id}`}
+                    className="font-bold text-neutral-700 dark:text-neutral-200"
+                  >
+                    {videoDescriptions[0]}
+                  </motion.h3>
+                </div>
+                
+                <div className="flex items-center gap-3">
                   <motion.a
                     layoutId={`button-${active.title}-${id}`}
                     href={active.ctaLink}
                     target="_blank"
-                    className="px-4 py-3 text-sm rounded-full font-bold bg-green-500 text-white"
+                    className="px-4 py-2 text-sm rounded-full font-bold bg-green-500 text-white"
                   >
-                    {active.ctaText}
+                    {videoScores[currentVideoIndex]}
                   </motion.a>
-                </div>
-                <div className="pt-4 relative px-4">
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="text-neutral-600 text-xs md:text-sm lg:text-base h-40 md:h-fit pb-10 flex flex-col items-start gap-4 overflow-auto dark:text-neutral-400 [mask:linear-gradient(to_bottom,white,white,transparent)] [scrollbar-width:none] [-ms-overflow-style:none] [-webkit-overflow-scrolling:touch]"
-                  >
-                    {typeof active.content === "function"
-                      ? active.content()
-                      : active.content}
-                  </motion.div>
-                </div>
-                
-                {/* Bottom close button */}
-                <div className="p-4 flex justify-center">
+                  
                   <button 
                     onClick={() => setActive(null)}
-                    className="px-6 py-3 bg-gray-100 hover:bg-gray-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-full font-medium transition-colors flex items-center gap-2"
+                    className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-full w-9 h-9"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
-                    Close
                   </button>
                 </div>
               </div>
@@ -164,7 +172,10 @@ export function ExpandableCardDemo() {
           <motion.div
             layoutId={`card-${card.title}-${id}`}
             key={`card-${card.title}-${id}`}
-            onClick={() => setActive(card)}
+            onClick={() => {
+              setCurrentVideoIndex(0);  // Reset to first video when opening card
+              setActive(card);
+            }}
             className="p-4 flex flex-col md:flex-row justify-between items-center hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer"
           >
             <div className="flex gap-4 flex-col md:flex-row ">
@@ -248,11 +259,7 @@ const cards = [
     ctaLink: "#",
     content: () => {
       return (
-        <p>
-          Diese Station demonstriert eine Übung mit der Prellwand.
-          <br /> <br /> 
-          Klicke auf die Karte, um ein Video der Übung zu sehen.
-        </p>
+        <p></p>
       );
     },
   }
