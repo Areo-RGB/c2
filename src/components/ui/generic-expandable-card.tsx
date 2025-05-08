@@ -112,7 +112,7 @@ export function GenericExpandableCard({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0.05 } }}
-              className="flex absolute top-2 right-2 lg:hidden items-center justify-center bg-white rounded-full h-6 w-6"
+              className="flex absolute top-4 right-4 z-[110] items-center justify-center bg-white dark:bg-neutral-800 rounded-full h-10 w-10 shadow-md border border-gray-200 dark:border-neutral-700"
               onClick={() => setActiveCard(null)}
               aria-label="Close"
             >
@@ -121,39 +121,45 @@ export function GenericExpandableCard({
             <motion.div
               layoutId={`card-${activeCard.id}-${componentId}`}
               ref={ref}
-              className="w-full max-w-[600px] h-full md:h-fit md:max-h-[90%] flex flex-col bg-white dark:bg-neutral-900 sm:rounded-3xl overflow-hidden"
+              className="w-screen h-screen flex flex-col bg-black dark:bg-black overflow-hidden"
             >
               {activeCard.videos && activeCard.videos.length > 0 ? (
                 <div className="flex flex-col h-full">
                   <motion.div
-                    // Consider if layoutId is needed here or if it causes issues with video key changes
-                    // layoutId={`video-${activeCard.id}-${componentId}`}
-                    className="w-full h-[650px] flex justify-center bg-black flex-grow"
+                    className="w-full h-[calc(100vh-100px)] flex justify-center items-center bg-black flex-grow overflow-hidden"
                   >
                     <video
-                      key={activeCard.videos[currentVideoIndex].url} // Keyed to video URL
+                      key={activeCard.videos[currentVideoIndex].url}
                       controls
                       autoPlay
-                      className="h-full object-contain"
+                      className="min-h-full min-w-full object-cover"
                       src={activeCard.videos[currentVideoIndex].url}
                     />
                   </motion.div>
                   {activeCard.videos.length > 1 && (
-                    <div className="flex border-b border-gray-200 dark:border-neutral-700">
-                      {activeCard.videos.map((video, index) => (
-                        <button
-                          key={video.title}
-                          onClick={() => setCurrentVideoIndex(index)}
-                          className={`py-3 px-6 font-medium text-sm transition-colors ${
-                            currentVideoIndex === index
-                              ? `${getThemeColorClasses("text")} border-b-2 ${getThemeColorClasses("border")}`
-                              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100" // Generic hover for inactive tabs
-                          }`}
-                          aria-current={currentVideoIndex === index ? "page" : undefined}
-                        >
-                          {video.title}
-                        </button>
-                      ))}
+                    <div className="flex absolute bottom-[100px] left-0 right-0 justify-center py-2 px-4">
+                      <div className="flex items-center justify-center space-x-1 bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 border border-white/10 shadow-lg">
+                        {activeCard.videos.map((video, index) => (
+                          <button
+                            key={video.title}
+                            onClick={() => setCurrentVideoIndex(index)}
+                            className={`relative py-2 px-5 font-medium text-sm transition-all rounded-lg ${
+                              currentVideoIndex === index
+                                ? `bg-white/10 text-white font-semibold shadow-inner`
+                                : "text-gray-300 hover:text-white hover:bg-white/5"
+                            }`}
+                            aria-current={currentVideoIndex === index ? "page" : undefined}
+                          >
+                            <span className="flex items-center">
+                              <span className={`mr-2 h-2 w-2 rounded-full ${currentVideoIndex === index ? 'bg-blue-500' : 'bg-gray-500'}`}></span>
+                              {video.title}
+                            </span>
+                            {currentVideoIndex === index && (
+                              <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-blue-500 mx-2"></span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -170,16 +176,14 @@ export function GenericExpandableCard({
                 </motion.div>
               )}
 
-              <div className="flex justify-between items-start p-4"> {/* Changed to items-start for better alignment if content wraps */}
-                <div className="flex-grow"> {/* Allow title/description to take more space */}
+              <div className="flex justify-between items-start p-4 absolute bottom-0 left-0 right-0 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm border-t border-gray-200 dark:border-neutral-800 z-[105]">
+                <div className="flex-grow">
                   <motion.h3
                     layoutId={`title-${activeCard.id}-${componentId}`}
                     className="font-bold text-neutral-700 dark:text-neutral-200"
                   >
-                    {/* Display video description if available, otherwise card title */}
                     {activeVideoData?.description || activeCard.title}
                   </motion.h3>
-                  {/* Optionally, show card's main description if no video description */}
                   {activeVideoData && activeCard.description && activeVideoData.description !== activeCard.description && (
                      <motion.p className="text-sm text-neutral-500 dark:text-neutral-400">
                        {activeCard.description}
@@ -211,7 +215,7 @@ export function GenericExpandableCard({
                   
                   <button
                     onClick={() => setActiveCard(null)}
-                    className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-200 rounded-full w-9 h-9"
+                    className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-700 dark:text-white rounded-full w-10 h-10 shadow-sm"
                     aria-label="Close"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -239,7 +243,7 @@ export function GenericExpandableCard({
               setCurrentVideoIndex(0); // Reset to first video when opening a card
               setActiveCard(card);
             }}
-            className="p-4 flex flex-col md:flex-row justify-between items-center hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer"
+            className="p-4 flex flex-col md:flex-row justify-between items-center hover:bg-neutral-50 dark:hover:bg-neutral-800 rounded-xl cursor-pointer border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 shadow-sm mb-3"
             role="button" // Added role
             tabIndex={0} // Added tabIndex for keyboard accessibility
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveCard(card);}} // Keyboard activation
@@ -272,7 +276,7 @@ export function GenericExpandableCard({
             </div>
             <motion.button
               layoutId={`button-cta-${card.id}-${componentId}`} // Unique layoutId
-              className={`px-4 py-2 text-sm rounded-full font-bold bg-gray-100 dark:bg-neutral-700 dark:text-neutral-200 text-black mt-4 md:mt-0 ${getThemeColorClasses("hover-bg")} ${getThemeColorClasses("hover-text")}`}
+              className={`px-4 py-2 text-sm rounded-full font-bold bg-gray-100 dark:bg-neutral-600 dark:text-white text-black mt-4 md:mt-0 ${getThemeColorClasses("hover-bg")} ${getThemeColorClasses("hover-text")}`}
             >
               {card.ctaText}
             </motion.button>
@@ -299,7 +303,7 @@ export const CloseIcon = () => {
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-4 w-4 text-black" // Consider dark mode for icon
+      className="h-5 w-5 text-black dark:text-white"
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M18 6l-12 12" />
