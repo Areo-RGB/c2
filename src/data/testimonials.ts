@@ -7,14 +7,14 @@ export const testimonials = [
   {
     quote: "",
     name: "Finley",
-    designation: "Nr.5",
+    designation: "5",
     src: finleyPortrait,
     cardType: "finley"
   },
   {
     quote: "",
     name: "Bent",
-    designation: "Nr.6",
+    designation: "6",
     src: bentAttr1,
     cardType: "bent"
   }

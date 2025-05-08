@@ -3,7 +3,7 @@
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
- 
+
 type Testimonial = {
   quote: string;
   name: string;
@@ -87,46 +87,52 @@ export const AnimatedTestimonials = ({
                   className="absolute inset-0 origin-bottom"
                   onClick={() => handleImageClick(index)}
                 >
-                  <div className="h-full w-full overflow-hidden rounded-2xl border-4 border-white shadow-xl dark:border-neutral-800 flex flex-col bg-gradient-to-br from-slate-50 to-slate-200 dark:from-neutral-900 dark:to-neutral-800">
-                    <div className="relative h-[80%] w-full overflow-hidden">
-                      <img
-                        src={testimonial.src}
-                        alt={testimonial.name}
-                        width={500}
-                        height={500}
-                        draggable={false}
-                        className="h-full w-full object-cover object-center cursor-pointer"
-                      />
-                      {isActive(index) && (
-                        <div className="absolute top-3 right-3 flex gap-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handlePrev();
-                            }}
-                            className="group/button flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm hover:bg-white dark:bg-black/60 dark:hover:bg-black/80"
-                          >
-                            <IconArrowLeft className="h-5 w-5 text-neutral-700 transition-transform duration-300 group-hover/button:rotate-12 dark:text-neutral-300" />
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleNext();
-                            }}
-                            className="group/button flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm hover:bg-white dark:bg-black/60 dark:hover:bg-black/80"
-                          >
-                            <IconArrowRight className="h-5 w-5 text-neutral-700 transition-transform duration-300 group-hover/button:-rotate-12 dark:text-neutral-300" />
-                          </button>
+                  <div className="h-full w-full overflow-hidden rounded-2xl flex flex-col shadow-lg group relative">
+                    {/* Outer frame with gradient border */}
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-slate-200 via-white to-slate-200 dark:from-neutral-700 dark:via-neutral-800 dark:to-neutral-700"></div>
+                    
+                    {/* Inner card content with proper positioning to avoid corner clipping */}
+                    <div className="absolute inset-[3px] rounded-xl flex flex-col bg-gradient-to-br from-slate-50 to-slate-100 dark:from-neutral-900 dark:to-neutral-850 overflow-hidden">
+                      {/* Image container */}
+                      <div className="relative h-full w-full overflow-hidden">
+                        <img
+                          src={testimonial.src}
+                          alt={testimonial.name}
+                          width={500}
+                          height={500}
+                          draggable={false}
+                          className="h-full w-full object-cover object-center cursor-pointer transition-transform duration-300 group-hover:scale-[1.03]"
+                        />
+                        
+                        {/* Subtle player name badge */}
+                        <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 px-3 py-1.5 bg-black/40 backdrop-blur-sm rounded-full">
+                          <span className="text-xs font-medium text-white tracking-wide">{testimonial.name}</span>
                         </div>
-                      )}
-                    </div>
-                    <div className="p-3 text-center flex-1 flex flex-col justify-center bg-gradient-to-b from-transparent to-gray-100 dark:to-neutral-800">
-                      <h3 className="text-xl font-bold text-neutral-800 dark:text-white">
-                        {testimonial.name}
-                      </h3>
-                      <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
-                        {testimonial.designation}
-                      </p>
+                        
+                        {/* Navigation buttons */}
+                        {isActive(index) && (
+                          <div className="absolute top-3 right-3 flex gap-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handlePrev();
+                              }}
+                              className="group/button flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors dark:bg-neutral-800/80 dark:hover:bg-neutral-800 shadow-md"
+                            >
+                              <IconArrowLeft className="h-5 w-5 text-neutral-700 transition-transform duration-300 group-hover/button:rotate-12 dark:text-neutral-300" />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleNext();
+                              }}
+                              className="group/button flex h-8 w-8 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors dark:bg-neutral-800/80 dark:hover:bg-neutral-800 shadow-md"
+                            >
+                              <IconArrowRight className="h-5 w-5 text-neutral-700 transition-transform duration-300 group-hover/button:-rotate-12 dark:text-neutral-300" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
