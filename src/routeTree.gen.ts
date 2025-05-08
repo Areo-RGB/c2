@@ -16,7 +16,6 @@ import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index
 import { Route as AuthenticatedUsersIndexImport } from './routes/_authenticated/users/index'
 import { Route as AuthenticatedTasksIndexImport } from './routes/_authenticated/tasks/index'
 import { Route as AuthenticatedStatistikenIndexImport } from './routes/_authenticated/statistiken/index'
-import { Route as AuthenticatedHelpCenterIndexImport } from './routes/_authenticated/help-center/index'
 import { Route as AuthenticatedChatsIndexImport } from './routes/_authenticated/chats/index'
 import { Route as AuthenticatedAppsIndexImport } from './routes/_authenticated/apps/index'
 import { Route as AuthenticatedStatistikenPerformanceDashboardImport } from './routes/_authenticated/statistiken/performance-dashboard'
@@ -51,13 +50,6 @@ const AuthenticatedStatistikenIndexRoute =
   AuthenticatedStatistikenIndexImport.update({
     id: '/statistiken/',
     path: '/statistiken/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-
-const AuthenticatedHelpCenterIndexRoute =
-  AuthenticatedHelpCenterIndexImport.update({
-    id: '/help-center/',
-    path: '/help-center/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
@@ -133,13 +125,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChatsIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
-    '/_authenticated/help-center/': {
-      id: '/_authenticated/help-center/'
-      path: '/help-center'
-      fullPath: '/help-center'
-      preLoaderRoute: typeof AuthenticatedHelpCenterIndexImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
     '/_authenticated/statistiken/': {
       id: '/_authenticated/statistiken/'
       path: '/statistiken'
@@ -172,7 +157,6 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedStatistikenPerformanceDashboardRoute: typeof AuthenticatedStatistikenPerformanceDashboardRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
-  AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
   AuthenticatedStatistikenIndexRoute: typeof AuthenticatedStatistikenIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
   AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
@@ -186,7 +170,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
     AuthenticatedStatistikenPerformanceDashboardRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
-  AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
   AuthenticatedStatistikenIndexRoute: AuthenticatedStatistikenIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
   AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
@@ -202,7 +185,6 @@ export interface FileRoutesByFullPath {
   '/statistiken/performance-dashboard': typeof AuthenticatedStatistikenPerformanceDashboardRoute
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
-  '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/statistiken': typeof AuthenticatedStatistikenIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
@@ -214,7 +196,6 @@ export interface FileRoutesByTo {
   '/statistiken/performance-dashboard': typeof AuthenticatedStatistikenPerformanceDashboardRoute
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
-  '/help-center': typeof AuthenticatedHelpCenterIndexRoute
   '/statistiken': typeof AuthenticatedStatistikenIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
@@ -228,7 +209,6 @@ export interface FileRoutesById {
   '/_authenticated/statistiken/performance-dashboard': typeof AuthenticatedStatistikenPerformanceDashboardRoute
   '/_authenticated/apps/': typeof AuthenticatedAppsIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
-  '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexRoute
   '/_authenticated/statistiken/': typeof AuthenticatedStatistikenIndexRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
   '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
@@ -243,7 +223,6 @@ export interface FileRouteTypes {
     | '/statistiken/performance-dashboard'
     | '/apps'
     | '/chats'
-    | '/help-center'
     | '/statistiken'
     | '/tasks'
     | '/users'
@@ -254,7 +233,6 @@ export interface FileRouteTypes {
     | '/statistiken/performance-dashboard'
     | '/apps'
     | '/chats'
-    | '/help-center'
     | '/statistiken'
     | '/tasks'
     | '/users'
@@ -266,7 +244,6 @@ export interface FileRouteTypes {
     | '/_authenticated/statistiken/performance-dashboard'
     | '/_authenticated/apps/'
     | '/_authenticated/chats/'
-    | '/_authenticated/help-center/'
     | '/_authenticated/statistiken/'
     | '/_authenticated/tasks/'
     | '/_authenticated/users/'
@@ -302,7 +279,6 @@ export const routeTree = rootRoute
         "/_authenticated/statistiken/performance-dashboard",
         "/_authenticated/apps/",
         "/_authenticated/chats/",
-        "/_authenticated/help-center/",
         "/_authenticated/statistiken/",
         "/_authenticated/tasks/",
         "/_authenticated/users/"
@@ -326,10 +302,6 @@ export const routeTree = rootRoute
     },
     "/_authenticated/chats/": {
       "filePath": "_authenticated/chats/index.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/help-center/": {
-      "filePath": "_authenticated/help-center/index.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/statistiken/": {
