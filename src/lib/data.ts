@@ -1,5 +1,5 @@
-import type { PerformanceData, PerformanceDifference } from "@/types/performance"
-import type { VideoData, ButtonVideoMapping } from "@/types/videos"
+import type { PerformanceData } from "@/types/performance"
+// import type { VideoData, ButtonVideoMapping } from "@/types/videos" // Commented out unused type import
 
 export const performanceData: PerformanceData[] = [
   { kategorie: "Schnelligkeit", uebung: "10m Sprint", name: "DFB-3", ergebnis: 2.39 },
@@ -82,114 +82,85 @@ export const performanceData: PerformanceData[] = [
   { kategorie: "Technik", uebung: "Ballkontrolle", name: "Bent", ergebnis: 8.95 },
   { kategorie: "Technik", uebung: "Balljonglieren", name: "Bent", ergebnis: 3 },
   { kategorie: "Gewandtheit", uebung: "Dribbling", name: "Bent", ergebnis: 10.28 },
-]
+];
 
-// Video data array with videos for performance cards
-export const videoData: VideoData[] = [
-  // Sample data with demo videos
-  {
-    url: "https://data3.fra1.cdn.digitaloceanspaces.com/a1%20(2).mp4",
-    name: "Finley",
-    test: "Gewandtheit",
-    result: 7.81,
-    date: "15-05-2023",
-    description: "Technique analysis focusing on agility and movement patterns",
-    buttonIndex: 0,
-  },
-  {
-    url: "https://data3.fra1.cdn.digitaloceanspaces.com/a1%20(2).mp4",
-    name: "Bent",
-    test: "Gewandtheit",
-    result: 8.14,
-    date: "02-06-2023",
-    description: "Follow-up assessment of agility performance",
-    buttonIndex: 1,
-  },
-  {
-    url: "https://data3.fra1.cdn.digitaloceanspaces.com/a1%20(2).mp4",
-    name: "Finley",
-    test: "10m Sprint",
-    result: 2.0,
-    date: "10-05-2023",
-    description: "10m sprint acceleration analysis",
-    buttonIndex: 0,
-  },
-]
+/* // Deleted videoData
+const videoData: VideoData[] = [
+  // ... data ...
+];
+*/
 
-/**
- * Get a list of all categories
- */
-export function getCategories(): string[] {
+/* // Deleted getCategories
+function getCategories(data: PerformanceData[]): string[] {
   const categories = new Set<string>()
-  performanceData.forEach((data) => categories.add(data.kategorie))
+  data.forEach((data) => categories.add(data.kategorie))
   return Array.from(categories)
 }
+*/
 
-/**
- * Get a list of all exercises
- */
-export function getExercises(): string[] {
+/* // Deleted getExercises
+function getExercises(data: PerformanceData[], category: string): string[] {
   const exercises = new Set<string>()
-  performanceData.forEach((data) => exercises.add(data.uebung))
+  data.forEach((data) => {
+    if (data.kategorie === category) {
+      exercises.add(data.uebung)
+    }
+  })
   return Array.from(exercises)
 }
+*/
 
-/**
- * Get a list of all player names
- */
-export function getPlayerNames(): string[] {
+/* // Deleted getPlayerNames
+function getPlayerNames(data: PerformanceData[]): string[] {
   const names = new Set<string>()
-  performanceData
+  data
     .filter((data) => !data.name.startsWith("DFB"))
     .forEach((data) => names.add(data.name))
   return Array.from(names)
 }
+*/
 
-/**
- * Get performance data for a specific player
- */
-export function getPlayerData(playerName: string): PerformanceData[] {
-  return performanceData.filter((data) => data.name === playerName)
+/* // Deleted getPlayerData
+function getPlayerData(data: PerformanceData[], playerName: string): PerformanceData[] {
+  return data.filter((data) => data.name === playerName)
 }
+*/
 
 /**
  * Get performance data for a specific exercise
  */
-export function getExerciseData(exercise: string): PerformanceData[] {
-  return performanceData.filter((data) => data.uebung === exercise)
+export function getExerciseData(data: PerformanceData[], exercise: string): PerformanceData[] {
+  return data.filter((data) => data.uebung === exercise)
 }
 
-/**
- * Get performance data for a specific category
- */
-export function getCategoryData(category: string): PerformanceData[] {
-  return performanceData.filter((data) => data.kategorie === category)
+/* // Deleted getCategoryData
+function getCategoryData(data: PerformanceData[], category: string): PerformanceData[] {
+  return data.filter((data) => data.kategorie === category)
 }
+*/
 
 /**
  * Get benchmark data for a specific exercise
  */
-export function getBenchmarkData(exercise: string): PerformanceData[] {
-  return performanceData.filter((data) => data.uebung === exercise && data.name.startsWith("DFB"))
+// KEEPING getBenchmarkData as it's used internally by estimatePlayerPercentile
+function getBenchmarkData(data: PerformanceData[], exercise: string): PerformanceData[] {
+  return data.filter((data) => data.uebung === exercise && data.name.startsWith("DFB"))
 }
 
 /**
  * Parse result string to number
  */
+// KEEPING parseResult as it's used internally
 function parseResult(result: number | string): number {
   if (typeof result === "number") {
     return result
   }
-
-  // Handle special cases like "3.93*" and convert to number
   const numericPart = result.replace(/[^0-9.]/g, "")
   return Number.parseFloat(numericPart)
 }
 
-/**
- * Calculate difference between two performance values
- */
-export function calculatePerformanceDifference(
+/* // Deleted calculatePerformanceDifference
+function calculatePerformanceDifference(
   value1: number | string,
   value2: number | string,
   exercise: string
@@ -199,7 +170,7 @@ export function calculatePerformanceDifference(
   const rawDifference = num1 - num2
   
   // For exercises where lower is better (like sprints, time-based)
-  const lowerIsBetter = isLowerBetter(exercise)
+  const lowerIsBetter = isLowerBetter(exercise) // Need isLowerBetter
   
   const isImprovement = lowerIsBetter ? rawDifference < 0 : rawDifference > 0
   
@@ -213,11 +184,13 @@ export function calculatePerformanceDifference(
     isImprovement,
   }
 }
+*/
 
 /**
  * Determine if lower values are better for a given exercise
  */
-export function isLowerBetter(exercise: string): boolean {
+// KEEPING isLowerBetter as it's used internally
+function isLowerBetter(exercise: string): boolean {
   // For these exercises, a lower time/score is better
   const lowerIsBetterExercises = [
     "10m Sprint",
@@ -233,8 +206,11 @@ export function isLowerBetter(exercise: string): boolean {
 /**
  * Estimate player percentile based on result and exercise
  */
-export function estimatePlayerPercentile(playerResult: number | string, exercise: string): number | null {
-  const benchmarks = getBenchmarkData(exercise)
+export function estimatePlayerPercentile(
+  playerResult: number | string,
+  exercise: string
+): number | null {
+  const benchmarks = getBenchmarkData(performanceData, exercise)
   
   if (benchmarks.length === 0) {
     return null
@@ -367,12 +343,10 @@ export function getGradientTextColor(percentile: number | null): string {
   return "text-green-600"
 }
 
-/**
- * Get video mappings for an exercise for use in performance ranking buttons
- */
-export function getVideoMappingsForExercise(exercise: string): ButtonVideoMapping[] {
+/* // Deleted getVideoMappingsForExercise
+function getVideoMappingsForExercise(exercise: string): ButtonVideoMapping[] {
   // Find all videos for this exercise
-  const exerciseVideos = videoData.filter((video) => video.test === exercise)
+  const exerciseVideos = videoData.filter((video) => video.test === exercise) // Relies on videoData
   
   // Map to button mappings
   const mappings: ButtonVideoMapping[] = exerciseVideos.map((video) => ({
@@ -390,4 +364,5 @@ export function getVideoMappingsForExercise(exercise: string): ButtonVideoMappin
   }
   
   return mappings
-} 
+}
+*/ 

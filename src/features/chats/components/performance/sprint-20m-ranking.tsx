@@ -1,9 +1,10 @@
 import { getExerciseData } from "@/features/chats/data/data"
+import { performanceData } from '@/lib/data';
 import PerformanceRanking from "./performance-ranking"
 
-export default function Sprint20mRanking({ className }: { className?: string }) {
-  const data = getExerciseData("20m Sprint")
+const data = getExerciseData(performanceData, "20m Sprint")
 
+export default function Sprint20mRanking({ className }: { className?: string }) {
   return (
     <PerformanceRanking
       title="20m Sprint"

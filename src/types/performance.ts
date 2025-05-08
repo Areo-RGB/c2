@@ -9,23 +9,6 @@ export interface PerformanceData {
 }
 
 /**
- * Performance difference calculation result
- */
-export interface PerformanceDifference {
-  percentDifference: number
-  isImprovement: boolean
-  rawDifference: number
-}
-
-/**
- * Extended performance data with comparison
- */
-export interface PerformanceComparison extends PerformanceData {
-  difference: PerformanceDifference
-  referenceValue: number | string
-}
-
-/**
  * Props for performance ranking components
  */
 export interface PerformanceRankingProps {
@@ -35,21 +18,4 @@ export interface PerformanceRankingProps {
   className?: string
   unit?: string
   sortAscending?: boolean
-}
-
-/**
- * Exercise category type
- */
-export type ExerciseCategory = "Schnelligkeit" | "Beweglichkeit" | "Technik" | "Ausdauer"
-
-/**
- * Exercise type
- */
-export type Exercise =
-  | "10m Sprint"
-  | "20m Sprint"
-  | "Gewandtheit"
-  | "Dribbling"
-  | "Ballkontrolle"
-  | "Balljonglieren"
-  | "YoYo IR1" 
+} 

@@ -1,9 +1,10 @@
 import { getExerciseData } from "@/features/chats/data/data"
+import { performanceData } from '@/lib/data';
 import PerformanceRanking from "./performance-ranking"
 
-export default function GewandtheitRanking({ className }: { className?: string }) {
-  const data = getExerciseData("Gewandtheit")
+const data = getExerciseData(performanceData, "Gewandtheit")
 
+export default function GewandtheitRanking({ className }: { className?: string }) {
   return (
     <PerformanceRanking
       title="Gewandtheit"

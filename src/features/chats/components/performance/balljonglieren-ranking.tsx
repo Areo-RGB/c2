@@ -1,9 +1,10 @@
 import { getExerciseData } from "@/features/chats/data/data"
+import { performanceData } from '@/lib/data';
 import PerformanceRanking from "./performance-ranking"
 
-export default function BalljonglierenRanking({ className }: { className?: string }) {
-  const data = getExerciseData("Balljonglieren")
+const data = getExerciseData(performanceData, "Balljonglieren")
 
+export default function BalljonglierenRanking({ className }: { className?: string }) {
   return (
     <PerformanceRanking
       title="Balljonglieren"
