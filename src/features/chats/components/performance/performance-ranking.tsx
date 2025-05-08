@@ -560,7 +560,7 @@ export default function PerformanceRanking({
         <div className={cn(
           "space-y-1.5 sm:space-y-2 relative",
           isPlayingVideo 
-            ? "absolute bottom-0 left-0 right-0 h-[160px] sm:h-[180px] overflow-y-auto p-3 sm:p-4 [&_*]:text-white [&_*]:[text-shadow:_0_1px_1px_rgb(0_0_0_/_90%)]"
+            ? "absolute bottom-0 left-0 right-0 h-[240px] sm:h-[280px] overflow-y-auto p-3 sm:p-4 [&_*]:text-white [&_*]:[text-shadow:_0_1px_1px_rgb(0_0_0_/_90%)]"
             : "h-[calc(100%-2rem)] overflow-y-auto",
           showComparisonOverlay ? "opacity-20 pointer-events-none" : ""
         )}>
@@ -667,7 +667,7 @@ export default function PerformanceRanking({
                   <div className="space-y-0.5">
                     <h3 className={cn(
                       "text-xs font-medium", 
-                      isPlayingVideo ? "text-white" : "text-card-foreground",
+                      isPlayingVideo ? "text-white bg-black/40 px-2 py-0.5 rounded inline-block" : "text-card-foreground",
                       "transition-colors duration-300"
                     )}>
                       {item.name}
@@ -688,7 +688,7 @@ export default function PerformanceRanking({
                     </h3>
                     <p className={cn(
                       "text-[11px]",
-                      isPlayingVideo ? "text-white/70" : "text-muted-foreground",
+                      isPlayingVideo ? "text-white/70 bg-black/40 px-2 py-0.5 rounded inline-block" : "text-muted-foreground",
                       "transition-colors duration-300"
                     )}>
                       {isBenchmark ? "DFB Benchmark" : item.kategorie}
@@ -715,7 +715,7 @@ export default function PerformanceRanking({
                     <span className={cn(
                       "text-xs font-medium", 
                       isPlayingVideo 
-                        ? "text-white" 
+                        ? "text-white bg-black/40 px-2 py-0.5 rounded" 
                         : !isBenchmark ? textColor : "text-card-foreground",
                       "transition-colors duration-300"
                     )}>
