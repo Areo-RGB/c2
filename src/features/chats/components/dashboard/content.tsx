@@ -1,13 +1,5 @@
 "use client"
 
-import { cn } from "@/lib/utils"
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { useState } from "react"
 import { type CategoryType, exercises } from "../../data/exercises.tsx"
 import CategoryTabs from "./CategoryTabs"

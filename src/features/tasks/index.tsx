@@ -5,10 +5,6 @@ import { GenericExpandableCard, CardData } from '@/components/ui/generic-expanda
 import { useState } from 'react';
 import { testimonials as testimonialData, finleyCardsData as finleyCardData, bentCardsData as bentCardData } from '@/data/testimonials';
 
-// Import local images
-import finleyPortrait from '@/assets/images/Finley_portrait.png';
-import bentAttr1 from '@/assets/images/bent_attr1_subject.png';
-
 // --- Card Data Definitions ---
 
 export default function Tasks() {
