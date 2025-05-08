@@ -215,12 +215,12 @@ export default function PerformanceRanking({
   }
 
   // Start animation transition
-  const handleStartAnimation = () => {
-    setShowCategoryLegend(false)
-    setShowComparisonOverlay(false)
-    setShowPreviousRanking(true)
-    setAnimationPhase('none')
-  }
+  // const handleStartAnimation = () => {
+  //   setShowCategoryLegend(false)
+  //   setShowComparisonOverlay(false)
+  //   setShowPreviousRanking(true)
+  //   setAnimationPhase('none')
+  // }
 
   // Determine which data set to show
   const displayData = showPreviousRanking ? sortedPreviousData : sortedData
@@ -309,36 +309,6 @@ export default function PerformanceRanking({
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <div className="text-xs">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setShowCategoryLegend(true)
-                        setShowPreviousRanking(false)
-                        setShowComparisonOverlay(false)
-                        setIsPopoverOpen(false)
-                      }}
-                      className="flex items-center gap-2 px-3 py-2 hover:bg-muted transition-colors w-full text-left"
-                    >
-                      <div className="w-3.5 h-2 bg-gradient-to-r from-red-600/60 to-green-600/60 rounded-sm" />
-                      <span>Kategorien anzeigen</span>
-                    </button>
-                    
-                    <div className="h-px bg-border mx-1" />
-                    
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleStartAnimation()
-                        setIsPopoverOpen(false)
-                      }}
-                      className="flex items-center gap-2 px-3 py-2 hover:bg-muted transition-colors w-full text-left"
-                    >
-                      <Clock className="w-3.5 h-3.5" />
-                      <span>Animation mit {previousRankingDate}</span>
-                    </button>
-                    
-                    <div className="h-px bg-border mx-1" />
-                    
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
