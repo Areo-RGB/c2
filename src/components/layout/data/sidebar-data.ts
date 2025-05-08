@@ -5,7 +5,7 @@ import {
   IconPackages,
   IconUsers,
 } from '@tabler/icons-react'
-import { AudioWaveform, Command, GalleryVerticalEnd } from 'lucide-react'
+import { AudioWaveform, Command, GalleryVerticalEnd, Video, BarChart } from 'lucide-react'
 import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
@@ -36,19 +36,19 @@ export const sidebarData: SidebarData = {
       title: 'General',
       items: [
         {
-          title: 'Dashboard',
+          title: 'Home',
           url: '/',
           icon: IconLayoutDashboard,
         },
         {
-          title: 'Tasks',
+          title: 'Fortschritt',
           url: '/tasks',
-          icon: IconChecklist,
+          icon: Video,
         },
         {
-          title: 'Users',
+          title: 'Statistik',
           url: '/users',
-          icon: IconUsers,
+          icon: BarChart,
         },
       ],
     },
