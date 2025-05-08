@@ -39,6 +39,44 @@ export function GenericExpandableCard({
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const componentId = useId(); // Renamed from 'id' to avoid conflict with card.id
+  
+  // Touch state for swipe functionality
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
+  // Minimum swipe distance required (in px)
+  const minSwipeDistance = 50;
+  
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (!activeCard?.videos || activeCard.videos.length <= 1) return;
+    
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart) return;
+    
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd || !activeCard?.videos) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe && currentVideoIndex < activeCard.videos.length - 1) {
+      setCurrentVideoIndex(currentVideoIndex + 1);
+    } else if (isRightSwipe && currentVideoIndex > 0) {
+      setCurrentVideoIndex(currentVideoIndex - 1);
+    }
+    
+    // Reset values
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -127,7 +165,33 @@ export function GenericExpandableCard({
                 <div className="flex flex-col h-full">
                   <motion.div
                     className="w-full h-[calc(100vh-100px)] flex justify-center items-center bg-black flex-grow overflow-hidden"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
                   >
+                    {/* Swipe indicators for videos with multiple items */}
+                    {activeCard.videos && activeCard.videos.length > 1 && touchStart && touchEnd && (
+                      <>
+                        {/* Left indicator */}
+                        {currentVideoIndex > 0 && (
+                          <div className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/30 text-white rounded-full p-2 z-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M15 18l-6-6 6-6" />
+                            </svg>
+                          </div>
+                        )}
+                        
+                        {/* Right indicator */}
+                        {currentVideoIndex < activeCard.videos.length - 1 && (
+                          <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 text-white rounded-full p-2 z-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M9 18l6-6-6-6" />
+                            </svg>
+                          </div>
+                        )}
+                      </>
+                    )}
+                    
                     <video
                       key={activeCard.videos[currentVideoIndex].url}
                       controls
@@ -159,6 +223,15 @@ export function GenericExpandableCard({
                             )}
                           </button>
                         ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Mobile swipe hint */}
+                  {activeCard.videos && activeCard.videos.length > 1 && (
+                    <div className="absolute bottom-[140px] left-0 right-0 flex justify-center md:hidden">
+                      <div className="bg-black/40 backdrop-blur-sm text-white/80 text-xs px-3 py-1.5 rounded-full">
+                        Swipe to change videos
                       </div>
                     </div>
                   )}

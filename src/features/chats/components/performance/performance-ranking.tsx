@@ -193,7 +193,9 @@ export default function PerformanceRanking({
       else if (item.name === "Bent") {
         if (title === "Balljonglieren") {
           defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/bent1/bent.jong.mp4"
-        } else if (title === "10m Sprint" || title === "20m Sprint") {
+        } else if (title === "10m Sprint") {
+          defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/Finley.Time/bent.20m.mp4"
+        } else if (title === "20m Sprint") {
           defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/bent1/lirdy.mp4"
         } else if (title === "Dribbling") {
           defaultMap[index] = "https://data3.fra1.cdn.digitaloceanspaces.com/2%20-%20(1x1)_3.mp4"
