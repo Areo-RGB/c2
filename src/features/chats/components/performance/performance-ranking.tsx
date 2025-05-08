@@ -225,9 +225,7 @@ export default function PerformanceRanking({
   // Determine which data set to show
   const displayData = showPreviousRanking ? sortedPreviousData : sortedData
 
-  // Find the finley and position 2 entries for special animation
-  const finleyCurrentIndex = sortedData.findIndex(item => item.name === "Finley")
-  const finleyPreviousIndex = sortedPreviousData.findIndex(item => item.name === "Finley")
+  // Find the position 2 entry for special animation
   const position2CurrentPlayerName = sortedData[1]?.name // Get player currently at position 2 (index 1)
 
   return (
@@ -413,10 +411,7 @@ export default function PerformanceRanking({
                       // Get position in current ranking for comparison
                       const currentPosition = playerPositions.get(item.name)?.current
                       const previousPosition = index + 1
-                      const positionChange = currentPosition && currentPosition !== previousPosition
-                        ? previousPosition - currentPosition
-                        : 0
-                          
+                      
                       return (
                         <div
                           key={`prev-${item.name}-${index}`}
