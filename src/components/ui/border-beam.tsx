@@ -48,7 +48,6 @@ interface BorderBeamProps {
 
 export const BorderBeam = ({
   className,
-  size = 50,
   delay = 0,
   duration = 6,
   colorFrom = "#ffaa40",
@@ -56,7 +55,6 @@ export const BorderBeam = ({
   transition,
   style,
   reverse = false,
-  initialOffset = 0,
 }: BorderBeamProps) => {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]">
