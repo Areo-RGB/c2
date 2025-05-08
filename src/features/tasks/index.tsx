@@ -3,6 +3,7 @@ import { Main } from '@/components/layout/main'
 import { AnimatedTestimonials } from '@/components/ui/animated-testimonials'
 import { GenericExpandableCard, CardData } from '@/components/ui/generic-expandable-card'
 import { useState } from 'react';
+import { testimonials as testimonialData, finleyCardsData as finleyCardData, bentCardsData as bentCardData } from '@/data/testimonials';
 
 // Import local images
 import finleyPortrait from '@/assets/images/Finley_portrait.png';
@@ -107,10 +108,10 @@ export default function Tasks() {
   let currentThemeColor: "blue" | "green" = "blue";
 
   if (selectedTestimonialCardType === "finley") {
-    currentCardsData = finleyCardsData;
+    currentCardsData = finleyCardData;
     currentThemeColor = "green";
   } else if (selectedTestimonialCardType === "bent") {
-    currentCardsData = bentCardsData;
+    currentCardsData = bentCardData;
     currentThemeColor = "blue";
   }
 
@@ -139,7 +140,7 @@ export default function Tasks() {
         ) : (
           <div className="cursor-pointer">
             <AnimatedTestimonials 
-              testimonials={testimonials.map(t => ({
+              testimonials={testimonialData.map(t => ({
                 ...t,
                 onClick: () => handleTestimonialClick(t.cardType || t.name.toLowerCase())
               }))} 
