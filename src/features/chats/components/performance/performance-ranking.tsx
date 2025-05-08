@@ -408,10 +408,6 @@ export default function PerformanceRanking({
                       const percentile = estimatePlayerPercentile(item.ergebnis, title)
                       const indicatorColor = getGradientColor(percentile)
                       
-                      // Get position in current ranking for comparison
-                      const currentPosition = playerPositions.get(item.name)?.current
-                      const previousPosition = index + 1
-                      
                       return (
                         <div
                           key={`prev-${item.name}-${index}`}
@@ -451,12 +447,16 @@ export default function PerformanceRanking({
                       const indicatorColor = getGradientColor(percentile)
                       
                       // Get position in previous ranking for comparison
-                      const previousPosition = playerPositions.get(item.name)?.previous
-                      const currentPosition = index + 1
-                      const positionChange = previousPosition && previousPosition !== currentPosition
-                        ? previousPosition - currentPosition
+                      const positionData = playerPositions.get(item.name)
+                      const hasPositionChange = positionData && 
+                                               positionData.current !== undefined && 
+                                               positionData.previous !== undefined && 
+                                               positionData.current !== positionData.previous
+            
+                      const positionChange = hasPositionChange 
+                        ? positionData.previous - positionData.current 
                         : 0
-                          
+            
                       return (
                         <div
                           key={`current-${item.name}-${index}`}
@@ -566,20 +566,6 @@ export default function PerformanceRanking({
               ? positionData.previous - positionData.current 
               : 0
             
-            // Determine special animation states
-            const isFinley = item.name === "Finley"
-            const isPosition2Player = !showPreviousRanking && item.name === position2CurrentPlayerName
-            
-            // Determine visibility based on animation phase
-            let visibility = "opacity-100"
-            if (animationPhase === 'fadeOut' && (isFinley || isPosition2Player)) {
-              visibility = "opacity-0"
-            } else if (animationPhase === 'fadeIn' && isFinley && !showPreviousRanking) {
-              visibility = "opacity-0"
-            } else if (animationPhase === 'complete' && isFinley && !showPreviousRanking) {
-              visibility = "opacity-100"
-            }
-            
             return (
               <div
                 key={`${item.name}-${index}`}
@@ -592,10 +578,9 @@ export default function PerformanceRanking({
                   isPlayingVideo ? "hover:bg-white/10" : 
                   index === 0 ? "bg-muted/30" : "",
                   isPlayingVideo && !isBenchmark ? "animate-in fade-in slide-in-from-left-5" : "",
-                  (animationPhase !== 'none' && (isFinley || isPosition2Player)) ? 
+                  (animationPhase !== 'none' && item.name === position2CurrentPlayerName) ? 
                     "transition-opacity duration-500" : "transition-colors duration-300",
-                  visibility,
-                  animationPhase === 'complete' && isFinley ? "bg-muted/30" : ""
+                  animationPhase === 'complete' && item.name === "Finley" ? "bg-muted/30" : ""
                 )}
                 onClick={(e) => {
                   e.stopPropagation() // Prevent clicks from bubbling to parent
@@ -673,7 +658,7 @@ export default function PerformanceRanking({
                       <div className={cn(
                         "flex items-center mr-1.5",
                         positionChange > 0 ? "text-green-500" : "text-red-500",
-                        animationPhase === 'complete' && isFinley ? "animate-pulse" : ""
+                        animationPhase === 'complete' && item.name === "Finley" ? "animate-pulse" : ""
                       )}>
                         {positionChange > 0 ? (
                           <ArrowUp className="w-3 h-3" />
