@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { Header } from './header'
 import { Main } from './main'
 import { Search } from '@/components/search'
@@ -7,7 +7,6 @@ import { ProfileDropdown } from '@/components/profile-dropdown'
 
 interface PageLayoutProps {
   children: ReactNode
-  title?: string
   showSearch?: boolean
   showThemeSwitch?: boolean
   showProfile?: boolean
@@ -17,7 +16,6 @@ interface PageLayoutProps {
 
 export function PageLayout({
   children,
-  title = 'Dashboard',
   showSearch = true,
   showThemeSwitch = true,
   showProfile = true,

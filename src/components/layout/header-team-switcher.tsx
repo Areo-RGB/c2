@@ -44,7 +44,7 @@ export function HeaderTeamSwitcher({
   
   const navigate = useNavigate()
 
-  const handleTeamSelect = (team: typeof teams[0], index: number) => {
+  const handleTeamSelect = (team: typeof teams[0]) => {
     // Set and persist the active team
     setActiveTeam(team)
     localStorage.setItem(SELECTED_TEAM_KEY, team.name)
@@ -105,7 +105,7 @@ export function HeaderTeamSwitcher({
           return (
             <DropdownMenuItem
               key={team.name}
-              onClick={() => handleTeamSelect(team, originalIndex)}
+              onClick={() => handleTeamSelect(team)}
               className='gap-2 p-2'
             >
               <div className='flex size-6 items-center justify-center rounded-sm border'>

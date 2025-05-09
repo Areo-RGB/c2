@@ -7,7 +7,6 @@ const ErrorMemoryManager: React.FC = () => {
     errors,
     isLoading,
     lastUpdated,
-    refreshErrors,
     addError,
     searchErrors,
     updateError

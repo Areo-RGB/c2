@@ -5,7 +5,6 @@ import {
   addError,
   searchErrors,
   updateError,
-  getAllErrors,
   getErrorById
 } from '../utils/errorMemory';
 

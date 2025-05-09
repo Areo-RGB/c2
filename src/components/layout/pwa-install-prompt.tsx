@@ -17,7 +17,7 @@ import { toast } from 'sonner'
 // Check if the app is installable (has a beforeinstallprompt event)
 export function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null)
-  const [isInstallable, setIsInstallable] = React.useState(false)
+  const [, setIsInstallable] = React.useState(false)
   const { isMobile } = useSidebar()
 
   // Listen for the beforeinstallprompt event
