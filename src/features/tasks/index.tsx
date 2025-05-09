@@ -41,8 +41,6 @@ export default function Tasks() {
       </Header>
       <Main className="h-full overflow-auto">
         <div className="container mx-auto py-8">
-          <h1 className="text-3xl font-bold mb-8 text-center">Spieler</h1>
-          
           {showExpandableCard && selectedTestimonialCardType ? (
             <>
               <div className="flex justify-between items-center mb-6 max-w-2xl mx-auto">
