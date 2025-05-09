@@ -5,6 +5,7 @@ import { GenericExpandableCard, CardData } from '@/components/ui/generic-expanda
 import { useState } from 'react';
 import { testimonials as testimonialData, finleyCardsData as finleyCardData, bentCardsData as bentCardData } from '@/data/testimonials';
 import { Header } from '@/components/layout/header'
+import { ThemeSwitch } from '@/components/theme-switch'
 
 export default function Tasks() {
   const [showExpandableCard, setShowExpandableCard] = useState(false);
@@ -33,7 +34,11 @@ export default function Tasks() {
 
   return (
     <>
-      <Header />
+      <Header>
+        <div className='ml-auto flex items-center space-x-4'>
+          <ThemeSwitch />
+        </div>
+      </Header>
       <Main className="h-full overflow-auto">
         <div className="container mx-auto py-8">
           <h1 className="text-3xl font-bold mb-8 text-center">Spieler</h1>
