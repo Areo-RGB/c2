@@ -6,7 +6,56 @@
       "context": "When a React component unexpectedly renders nothing",
       "solution": "Check if the component is receiving the expected props and verify conditional rendering logic",
       "timestamp": "2023-10-01T12:34:56Z"
+    },
+    {
+      "id": "err-002",
+      "description": "File operations on Windows failing with Unix-style commands",
+      "context": "When attempting to use Unix commands like rm -f for file operations on Windows",
+      "solution": "Always use PowerShell commands first on Windows, such as Remove-Item -Path 'filepath' -Force for file deletion",
+      "timestamp": "2023-11-02T10:23:45Z"
+    },
+    {
+      "id": "err-003",
+      "description": "File deletion in workspace fails with delete_file tool",
+      "context": "When trying to remove files using the delete_file tool in Cursor IDE on Windows",
+      "solution": "Use PowerShell command 'Remove-Item -Path \"path/to/file\" -Force' through run_terminal_cmd tool instead of the delete_file tool when files aren't being found",
+      "timestamp": "2023-11-02T10:25:30Z"
+    },
+    {
+      "id": "err-004",
+      "description": "Making edits without consulting error memory",
+      "context": "When implementing changes or fixes without first checking if similar issues have been encountered before",
+      "solution": "Always check the error memory system (using findErrors() or recallSimilarErrors()) before making edits, and follow any applicable recommendations from previous experiences",
+      "timestamp": "2023-11-02T10:30:00Z"
+    },
+    {
+      "id": "err-005",
+      "description": "WebSocket connection failing in Vite app",
+      "context": "Error message: WebSocket connection to 'ws://localhost:4000/?token=XX' failed",
+      "solution": "Ensure vite.config.ts has the correct port configuration with matching port in server.port and server.hmr settings",
+      "timestamp": "2023-11-25T15:45:00Z"
+    },
+    {
+      "id": "err-006",
+      "description": "Missing export error in module imports",
+      "context": "Error: The requested module does not provide an export named 'X'",
+      "solution": "Check import path, ensure the function exists in the target file, and try using a full filename with extension in the import path (e.g., '@/lib/utils.ts' instead of '@/lib/utils')",
+      "timestamp": "2023-11-25T15:46:00Z"
+    },
+    {
+      "id": "err-007",
+      "description": "Favicon resource size error in manifest",
+      "context": "Error while trying to use icon from Manifest: Resource size is not correct - typo in the Manifest?",
+      "solution": "Update the manifest.json file with the correct icon sizes that match the actual dimensions of the image files",
+      "timestamp": "2023-11-25T15:47:00Z"
+    },
+    {
+      "id": "err-008",
+      "description": "TanStack Router showing route path instead of component",
+      "context": "When navigating to a route in TanStack Router application, the page only shows the route path text (e.g. \"/_authenticated/chats/player-progress\") instead of rendering the actual component.",
+      "solution": "Verify the component has the correct order of Route export and component definition. Component should be defined before the Route export or include Route definition at the end of the file. Ensure the component is being properly passed to createFileRoute and is correctly implemented.",
+      "timestamp": "2024-05-09T12:00:00Z"
     }
   ],
-  "lastUpdated": "2023-10-01T12:34:56Z"
+  "lastUpdated": "2024-05-09T12:00:00Z"
 } 

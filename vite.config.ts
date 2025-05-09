@@ -12,7 +12,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   preview: {
-    port: Number(process.env.PORT) || 8080,
+    port: Number(process.env.PORT) || 5173,
     host: true,
     strictPort: true,
     headers: {
@@ -20,9 +20,14 @@ export default defineConfig({
     }
   },
   server: {
-    port: Number(process.env.PORT) || 8080,
+    port: Number(process.env.PORT) || 5173,
     host: true,
-    strictPort: true
+    strictPort: false,
+    hmr: {
+      protocol: 'ws',
+      host: 'localhost',
+      port: 5173
+    }
   },
   resolve: {
     alias: {
