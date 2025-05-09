@@ -99,9 +99,6 @@ export function HeaderTeamSwitcher({
           Teams
         </DropdownMenuLabel>
         {alternativeTeams.map((team) => {
-          // Find the original index in the full teams array
-          const originalIndex = teams.findIndex(t => t.name === team.name)
-          
           return (
             <DropdownMenuItem
               key={team.name}
