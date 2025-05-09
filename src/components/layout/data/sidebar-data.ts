@@ -12,17 +12,12 @@ export const sidebarData: SidebarData = {
   },
   teams: [
     {
-      name: 'Quo Vadis',
-      logo: Command,
-      plan: 'Vite + ShadcnUI',
-    },
-    {
-      name: 'Acme Inc',
+      name: 'Finley',
       logo: GalleryVerticalEnd,
       plan: 'Enterprise',
     },
     {
-      name: 'Acme Corp.',
+      name: 'Bent',
       logo: AudioWaveform,
       plan: 'Startup',
     },
