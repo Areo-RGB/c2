@@ -6,14 +6,14 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar'
 import { NavGroup } from '@/components/layout/nav-group'
-import { TeamSwitcher } from '@/components/layout/team-switcher'
+import { PWAInstallPrompt } from '@/components/layout/pwa-install-prompt'
 import { sidebarData } from './data/sidebar-data'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible='icon' variant='floating' {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={sidebarData.teams} />
+        <PWAInstallPrompt />
       </SidebarHeader>
       <SidebarContent>
         {sidebarData.navGroups.map((props) => (
