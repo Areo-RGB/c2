@@ -3,8 +3,8 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "@/hooks/use-outside-click";
-// Image imports will need to be handled by the parent component passing the src string.
-// import bentAttr1 from '@/assets/images/bent_attr1_subject.png'; // Example, to be removed
+import { useIsMobile } from "@/hooks/use-mobile"; // Import the hook
+import { cn } from "@/lib/utils"; // Import cn utility
 
 // --- Data Types ---
 export interface VideoDetail {
@@ -39,6 +39,7 @@ export function GenericExpandableCard({
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const componentId = useId(); // Renamed from 'id' to avoid conflict with card.id
+  const isMobile = useIsMobile(); // Use the hook
   
   // Touch state for swipe functionality
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -86,7 +87,10 @@ export function GenericExpandableCard({
     }
 
     if (activeCard) {
-      document.body.style.overflow = "hidden";
+      // Only hide overflow on larger screens where modal is truly fixed overlay
+      if (!isMobile) {
+         document.body.style.overflow = "hidden";
+      }
     } else {
       document.body.style.overflow = "auto";
     }
@@ -94,18 +98,19 @@ export function GenericExpandableCard({
     window.addEventListener("keydown", onKeyDown);
     return () => {
       window.removeEventListener("keydown", onKeyDown);
-      // Restore overflow on unmount if card was active
-      if (activeCard) { // Check added for safety, though covered by else in main effect body
+      // Restore overflow on unmount if card was active and not mobile
+      if (activeCard && !isMobile) {
          document.body.style.overflow = "auto";
       }
     };
-  }, [activeCard]);
+  }, [activeCard, isMobile]); // Add isMobile to dependencies
 
   const handleOutsideClick = React.useCallback(() => {
     setActiveCard(null);
   }, []);
 
-  useOutsideClick(ref, handleOutsideClick);
+  // Only use outside click when NOT on mobile
+  useOutsideClick(ref, handleOutsideClick, !isMobile); // Pass !isMobile as enabled condition
 
   const activeVideoData = activeCard?.videos?.[currentVideoIndex];
 
@@ -128,6 +133,8 @@ export function GenericExpandableCard({
     }
   };
 
+  // Determine if layout animations should be enabled
+  const enableLayoutAnimations = !isMobile;
 
   return (
     <>
@@ -137,34 +144,54 @@ export function GenericExpandableCard({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/20 h-full w-full z-10"
+            // Use conditional className instead of fixed inset for mobile full screen
+            className={cn(
+              "fixed inset-0 bg-black/20 h-full w-full z-10",
+              isMobile && "bg-background/80 dark:bg-black/80" // Use a softer overlay on mobile
+            )}
           />
         )}
       </AnimatePresence>
       <AnimatePresence>
         {activeCard ? (
-          <div className="fixed inset-0 grid place-items-center z-[100]">
+          <div
+            className={cn(
+              "fixed inset-0 grid place-items-center z-[100] p-4", // Added padding for mobile
+              isMobile && "p-0" // Remove padding for full-screen mobile modal
+            )}
+          >
             <motion.button
               key={`button-close-${activeCard.id}-${componentId}`}
-              layout // Added layout to close button for consistency
+              layout={enableLayoutAnimations} // Conditional layout
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0, transition: { duration: 0.05 } }}
-              className="flex absolute top-4 right-4 z-[110] items-center justify-center bg-white dark:bg-neutral-800 rounded-full h-10 w-10 shadow-md border border-gray-200 dark:border-neutral-700"
+              className={cn(
+                 "flex absolute top-4 right-4 z-[110] items-center justify-center bg-white dark:bg-neutral-800 rounded-full h-10 w-10 shadow-md border border-gray-200 dark:border-neutral-700",
+                 isMobile && "top-2 right-2 h-8 w-8" // Smaller close button on mobile
+              )}
               onClick={() => setActiveCard(null)}
               aria-label="Close"
             >
               <CloseIcon />
             </motion.button>
             <motion.div
-              layoutId={`card-${activeCard.id}-${componentId}`}
+              layoutId={enableLayoutAnimations ? `card-${activeCard.id}-${componentId}` : undefined} // Conditional layoutId
               ref={ref}
-              className="w-screen h-screen flex flex-col bg-black dark:bg-black overflow-hidden"
+              className={cn(
+                "w-screen h-screen flex flex-col bg-black dark:bg-black overflow-hidden",
+                !isMobile && "max-w-2xl max-h-[80vh] rounded-xl", // Constrain size on larger screens
+                isMobile && "rounded-none" // No rounded corners on mobile full screen
+              )}
             >
               {activeCard.videos && activeCard.videos.length > 0 ? (
                 <div className="flex flex-col h-full">
                   <motion.div
-                    className="w-full h-[calc(100vh-100px)] flex justify-center items-center bg-black flex-grow overflow-hidden"
+                    className={cn(
+                      "w-full h-[calc(100vh-100px)] flex justify-center items-center bg-black flex-grow overflow-hidden",
+                      !isMobile && "rounded-t-xl", // Rounded top on larger screens
+                      isMobile && "h-full pb-[120px]" // Use full height on mobile, push info to bottom
+                    )}
                     onTouchStart={onTouchStart}
                     onTouchMove={onTouchMove}
                     onTouchEnd={onTouchEnd}
@@ -196,12 +223,35 @@ export function GenericExpandableCard({
                       key={activeCard.videos[currentVideoIndex].url}
                       controls
                       autoPlay
-                      className="min-h-full min-w-full object-cover"
+                      className={cn(
+                         "min-h-full min-w-full object-cover",
+                         isMobile && "max-h-full max-w-full" // Ensure video fits within bounds on mobile
+                       )}
                       src={activeCard.videos[currentVideoIndex].url}
                     />
                   </motion.div>
-                  {activeCard.videos.length > 1 && (
-                    <div className="flex absolute bottom-[100px] left-0 right-0 justify-center py-2 px-4">
+                  {/* Navigation dots - Only visible when video is playing and on mobile */}
+                   {activeCard.videos.length > 1 && isMobile && (
+                     <div className="flex absolute bottom-[100px] left-0 right-0 justify-center py-2 px-4 z-[110]">
+                       <div className="flex items-center justify-center space-x-2 bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 border border-white/10 shadow-lg">
+                         {activeCard.videos.map((video, index) => (
+                           <button
+                             key={`mobile-dot-${video.title}`}
+                             onClick={() => setCurrentVideoIndex(index)}
+                             className={`w-2 h-2 rounded-full transition-colors`}
+                             aria-current={currentVideoIndex === index ? "page" : undefined}
+                             style={{
+                               backgroundColor: currentVideoIndex === index
+                                 ? 'white'
+                                 : 'rgba(255, 255, 255, 0.4)'
+                             }}
+                           />
+                         ))}
+                       </div>
+                     </div>
+                   )}
+                  {activeCard.videos.length > 1 && !isMobile && (
+                    <div className="flex absolute bottom-[100px] left-0 right-0 justify-center py-2 px-4 z-[110]">
                       <div className="flex items-center justify-center space-x-1 bg-black/70 backdrop-blur-sm rounded-full px-3 py-1 border border-white/10 shadow-lg">
                         {activeCard.videos.map((video, index) => (
                           <button
@@ -226,10 +276,10 @@ export function GenericExpandableCard({
                       </div>
                     </div>
                   )}
-                  
+
                   {/* Mobile swipe hint */}
-                  {activeCard.videos && activeCard.videos.length > 1 && (
-                    <div className="absolute bottom-[140px] left-0 right-0 flex justify-center md:hidden">
+                  {activeCard.videos && activeCard.videos.length > 1 && isMobile && (
+                    <div className="absolute bottom-[135px] left-0 right-0 flex justify-center">
                       <div className="bg-black/40 backdrop-blur-sm text-white/80 text-xs px-3 py-1.5 rounded-full">
                         Swipe to change videos
                       </div>
@@ -238,21 +288,31 @@ export function GenericExpandableCard({
                 </div>
               ) : (
                 // Fallback for cards without videos, using the main card image
-                <motion.div layoutId={`image-${activeCard.id}-${componentId}`}>
+                <motion.div layoutId={enableLayoutAnimations ? `image-${activeCard.id}-${componentId}` : undefined}>
                   <img
                     width={200} // These seem like defaults, might want to make them more dynamic or review
                     height={200}
                     src={activeCard.src} // Use active card's main image
                     alt={activeCard.title}
-                    className="w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top"
+                    className={cn(
+                       "w-full h-80 lg:h-80 sm:rounded-tr-lg sm:rounded-tl-lg object-cover object-top",
+                       !isMobile && "rounded-t-xl", // Rounded top on larger screens
+                       isMobile && "h-auto max-h-[60vh] rounded-none" // Adjust size and remove rounded on mobile
+                    )}
                   />
                 </motion.div>
               )}
 
-              <div className="flex justify-between items-start p-4 absolute bottom-0 left-0 right-0 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm border-t border-gray-200 dark:border-neutral-800 z-[105]">
+              <div
+                 className={cn(
+                   "flex justify-between items-start p-4 absolute bottom-0 left-0 right-0 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-sm border-t border-gray-200 dark:border-neutral-800 z-[105]",
+                   !isMobile && "rounded-b-xl", // Rounded bottom on larger screens
+                   isMobile && "rounded-none flex-col items-stretch gap-2" // Flex-col and stretch on mobile
+                 )}
+               >
                 <div className="flex-grow">
                   <motion.h3
-                    layoutId={`title-${activeCard.id}-${componentId}`}
+                    layoutId={enableLayoutAnimations ? `title-${activeCard.id}-${componentId}` : undefined} // Conditional layoutId
                     className="font-bold text-neutral-700 dark:text-neutral-200"
                   >
                     {activeVideoData?.description || activeCard.title}
@@ -263,11 +323,15 @@ export function GenericExpandableCard({
                      </motion.p>
                   )}
                 </div>
-                
-                <div className="flex items-center gap-3 flex-shrink-0"> {/* Prevent shrinking */}
+
+                {/* CTA and Close button container */}
+                 <div className={cn(
+                   "flex items-center gap-3 flex-shrink-0",
+                   isMobile && "flex-row-reverse justify-between" // Reverse order and justify on mobile
+                 )}> {/* Prevent shrinking */}
                   {activeVideoData?.score && (
                      <motion.div // Changed from <a> to <div> if not always a link
-                        layoutId={`button-cta-${activeCard.id}-${componentId}`} // Ensured unique layoutId from list item
+                        layoutId={enableLayoutAnimations ? `button-cta-${activeCard.id}-${componentId}` : undefined} // Conditional layoutId
                         className={`px-4 py-2 text-sm rounded-full font-bold ${getThemeColorClasses("bg")} text-white`}
                       >
                         {activeVideoData.score}
@@ -276,25 +340,28 @@ export function GenericExpandableCard({
                   {/* Generic CTA from card data if no video score or if it's a non-video card */}
                   {!activeVideoData?.score && activeCard.ctaLink && (
                      <motion.a
-                        layoutId={`button-cta-${activeCard.id}-${componentId}`}
+                        layoutId={enableLayoutAnimations ? `button-cta-${activeCard.id}-${componentId}` : undefined} // Conditional layoutId
                         href={activeCard.ctaLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`px-4 py-2 text-sm rounded-full font-bold ${getThemeColorClasses("bg")} text-white`}
+                        className={`px-4 py-2 text-sm rounded-full font-bold bg-gray-100 dark:bg-neutral-600 dark:text-white text-black ${getThemeColorClasses("hover-bg")} ${getThemeColorClasses("hover-text")}`}
                       >
                         {activeCard.ctaText} {/* Use main CTA text */}
                       </motion.a>
                   )}
-                  
-                  <button
-                    onClick={() => setActiveCard(null)}
-                    className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-700 dark:text-white rounded-full w-10 h-10 shadow-sm"
-                    aria-label="Close"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M18 6L6 18M6 6l12 12" />
-                    </svg>
-                  </button>
+
+                  {/* Close button - Positioned absolutely above for mobile, part of flex on desktop */}
+                  {!isMobile && (
+                     <button
+                       onClick={() => setActiveCard(null)}
+                       className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-700 dark:text-white rounded-full w-10 h-10 shadow-sm"
+                       aria-label="Close"
+                     >
+                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                         <path d="M18 6L6 18M6 6l12 12" />
+                       </svg>
+                     </button>
+                   )}
                 </div>
               </div>
               {/* Render custom content if provided and no videos */}
@@ -310,7 +377,7 @@ export function GenericExpandableCard({
       <ul className="max-w-2xl mx-auto w-full gap-4">
         {cardsData.map((card) => (
           <motion.li // Changed from div to li for semantic list
-            layoutId={`card-${card.id}-${componentId}`}
+            layoutId={enableLayoutAnimations ? `card-${card.id}-${componentId}` : undefined} // Conditional layoutId
             key={card.id} // Use card.id as key
             onClick={() => {
               setCurrentVideoIndex(0); // Reset to first video when opening a card
@@ -322,7 +389,7 @@ export function GenericExpandableCard({
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveCard(card);}} // Keyboard activation
           >
             <div className="flex gap-4 flex-col md:flex-row items-center"> {/* items-center added */}
-              <motion.div layoutId={`image-${card.id}-${componentId}`}>
+              <motion.div layoutId={enableLayoutAnimations ? `image-${card.id}-${componentId}` : undefined}>
                 <img
                   width={100} // Default width for list item image
                   height={100} // Default height for list item image
@@ -333,14 +400,14 @@ export function GenericExpandableCard({
               </motion.div>
               <div className="text-center md:text-left"> {/* Ensure text alignment */}
                 <motion.h3
-                  layoutId={`title-${card.id}-${componentId}`}
+                  layoutId={enableLayoutAnimations ? `title-${card.id}-${componentId}` : undefined} // Conditional layoutId
                   className="font-medium text-neutral-800 dark:text-neutral-200"
                 >
                   {card.title}
                 </motion.h3>
                 <motion.p
                   // Consider if description needs a layoutId or if it's too much
-                  // layoutId={`description-${card.id}-${componentId}`} 
+                  // layoutId={`description-${card.id}-${componentId}`}
                   className="text-neutral-600 dark:text-neutral-400"
                 >
                   {card.description}
@@ -348,7 +415,7 @@ export function GenericExpandableCard({
               </div>
             </div>
             <motion.button
-              layoutId={`button-cta-${card.id}-${componentId}`} // Unique layoutId
+              layoutId={enableLayoutAnimations ? `button-cta-${card.id}-${componentId}` : undefined} // Conditional layoutId
               className={`px-4 py-2 text-sm rounded-full font-bold bg-gray-100 dark:bg-neutral-600 dark:text-white text-black mt-4 md:mt-0 ${getThemeColorClasses("hover-bg")} ${getThemeColorClasses("hover-text")}`}
             >
               {card.ctaText}
@@ -383,4 +450,4 @@ export const CloseIcon = () => {
       <path d="M6 6l12 12" />
     </motion.svg>
   );
-}; 
+};

@@ -14,15 +14,25 @@ import {
 } from '@/components/ui/tooltip'
 import { toast } from 'sonner'
 
+// Define the type for BeforeInstallPromptEvent
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed';
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
 // Check if the app is installable (has a beforeinstallprompt event)
 export function PWAInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = React.useState<any>(null)
+  const [deferredPrompt, setDeferredPrompt] = React.useState<BeforeInstallPromptEvent | null>(null)
   const [, setIsInstallable] = React.useState(false)
   const { isMobile } = useSidebar()
 
   // Listen for the beforeinstallprompt event
   React.useEffect(() => {
-    const handleBeforeInstallPrompt = (e: Event) => {
+    const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault()
       // Stash the event so it can be triggered later
@@ -31,7 +41,7 @@ export function PWAInstallPrompt() {
       setIsInstallable(true)
     }
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener)
 
     // Check if the app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -39,7 +49,7 @@ export function PWAInstallPrompt() {
     }
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener)
     }
   }, [])
 

@@ -83,7 +83,7 @@ export default function PerformanceRanking({
     const prevData = JSON.parse(JSON.stringify(data))
     
     // Adjust results to create different positions
-    return prevData.map((item: any) => {
+    return prevData.map((item: PerformanceData) => {
       // For specific players, modify their results to reflect different positions
       if (item.name === "Finley") {
         const newValue = Number(item.ergebnis) + 0.5 // Make it worse (higher time)

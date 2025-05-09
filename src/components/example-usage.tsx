@@ -1,9 +1,7 @@
-import React from 'react';
 import { GradientExerciseCard } from './ui/gradient-exercise-card';
 
 export const ExampleUsage = () => {
   const handlePlay = () => {
-    console.log('Play video');
     // Add your video playback logic here
   };
 

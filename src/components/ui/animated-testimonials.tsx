@@ -3,6 +3,7 @@
 import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type Testimonial = {
   quote: string;
@@ -23,6 +24,7 @@ export const AnimatedTestimonials = ({
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const [isSwiping, setIsSwiping] = useState(false);
   const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(null);
+  const isMobile = useIsMobile();
  
   const handleNext = () => {
     setActive((prev) => (prev + 1) % testimonials.length);
@@ -47,6 +49,7 @@ export const AnimatedTestimonials = ({
   };
 
   const onTouchMove = (e: React.TouchEvent) => {
+    if (!touchStart) return;
     setTouchEnd(e.targetTouches[0].clientX);
     
     // Determine swipe direction during movement for visual feedback
@@ -122,33 +125,30 @@ export const AnimatedTestimonials = ({
               {testimonials.map((testimonial, index) => (
                 <motion.div
                   key={testimonial.src}
-                  initial={{
+                  initial={isMobile ? { opacity: 0, scale: 0.95 } : {
                     opacity: 0,
                     scale: 0.9,
                     z: -100,
                     rotate: randomRotateY(),
                   }}
-                  animate={{
+                  animate={isMobile ? {
+                    opacity: isActive(index) ? 1 : 0.7,
+                    scale: isActive(index) ? 1 : 0.95,
+                  } : {
                     opacity: isActive(index) ? 1 : 0.7,
                     scale: isActive(index) ? 1 : 0.95,
                     z: isActive(index) ? 0 : -100,
                     rotate: isActive(index) ? 0 : randomRotateY(),
-                    zIndex: isActive(index)
-                      ? 40
-                      : testimonials.length + 2 - index,
-                    y: isActive(index) ? [0, -80, 0] : 0,
-                    x: isSwiping && isActive(index) && touchStart && touchEnd 
-                      ? touchEnd - touchStart 
-                      : 0
                   }}
-                  exit={{
+                  style={{ zIndex: isActive(index) ? 40 : testimonials.length + 2 - index }}
+                  exit={isMobile ? { opacity: 0, scale: 0.95 } : {
                     opacity: 0,
                     scale: 0.9,
                     z: 100,
                     rotate: randomRotateY(),
                   }}
                   transition={{
-                    duration: isSwiping ? 0.1 : 0.4,
+                    duration: isSwiping ? 0.1 : (isMobile ? 0.2 : 0.4),
                     ease: "easeInOut",
                   }}
                   className="absolute inset-0 origin-bottom"
@@ -224,7 +224,7 @@ export const AnimatedTestimonials = ({
           <motion.div
             key={active}
             initial={{
-              y: 20,
+              y: isMobile ? 0 : 20,
               opacity: 0,
             }}
             animate={{
@@ -232,11 +232,11 @@ export const AnimatedTestimonials = ({
               opacity: 1,
             }}
             exit={{
-              y: -20,
+              y: isMobile ? 0 : -20,
               opacity: 0,
             }}
             transition={{
-              duration: 0.2,
+              duration: isMobile ? 0.1 : 0.2,
               ease: "easeInOut",
             }}
             className="flex flex-col items-center text-center"
@@ -246,9 +246,9 @@ export const AnimatedTestimonials = ({
                 <motion.span
                   key={index}
                   initial={{
-                    filter: "blur(10px)",
+                    filter: isMobile ? "none" : "blur(10px)",
                     opacity: 0,
-                    y: 5,
+                    y: isMobile ? 0 : 5,
                   }}
                   animate={{
                     filter: "blur(0px)",
@@ -256,9 +256,9 @@ export const AnimatedTestimonials = ({
                     y: 0,
                   }}
                   transition={{
-                    duration: 0.2,
+                    duration: isMobile ? 0.1 : 0.2,
                     ease: "easeInOut",
-                    delay: 0.02 * index,
+                    delay: isMobile ? 0.01 * index : 0.02 * index,
                   }}
                   className="inline-block"
                 >

@@ -15,15 +15,15 @@ interface ProgressEntry {
 }
 
 interface PlayerProgressTimelineProps {
-  playerName: string;
-  exerciseName: string;
   entries: ProgressEntry[];
+  // These props are not used but may be needed for future expansion
+  playerName?: string;
+  exerciseName?: string;
 }
 
 export default function PlayerProgressTimeline({
-  playerName,
-  exerciseName,
   entries = [],
+  // playerName and exerciseName are not used in this component
 }: PlayerProgressTimelineProps) {
   const [activeVideo, setActiveVideo] = useState<string | null>(null)
   

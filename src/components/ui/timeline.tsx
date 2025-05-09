@@ -6,6 +6,7 @@ import {
 } from "motion/react";
 import React, { useEffect, useRef, useState } from "react";
 import { TypewriterEffect } from "./typewriter-effect";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Add CSS for glow effects and animations
 const customStyles = `
@@ -35,14 +36,15 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
   const ref = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (ref.current) {
       const rect = ref.current.getBoundingClientRect();
-      const adjustedHeight = Math.min(rect.height, data.length * 400 + 200);
+      const adjustedHeight = Math.min(rect.height, data.length * (isMobile ? 200 : 400) + (isMobile ? 100 : 200));
       setHeight(adjustedHeight);
     }
-  }, [ref, data.length]);
+  }, [ref, data.length, isMobile]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -105,17 +107,19 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
         ))}
         <div
           style={{
-            height: data.length > 1 ? height + "px" : "50vh",
+            height: data.length > 1 ? height + "px" : (isMobile ? "30vh" : "50vh"),
           }}
           className="absolute md:left-8 left-8 top-0 overflow-hidden w-[3px] bg-[linear-gradient(to_bottom,var(--tw-gradient-stops))] from-transparent from-[0%] via-blue-200 dark:via-blue-800 to-transparent to-[99%] [mask-image:linear-gradient(to_bottom,transparent_0%,black_10%,black_90%,transparent_100%)]"
         >
-          <motion.div
-            style={{
-              height: heightTransform,
-              opacity: opacityTransform,
-            }}
-            className="absolute inset-x-0 top-0 w-[3px] bg-gradient-to-t from-cyan-500 via-blue-500 to-transparent from-[0%] via-[10%] rounded-full glow-timeline"
-          />
+          {!isMobile && (
+             <motion.div
+               style={{
+                 height: heightTransform,
+                 opacity: opacityTransform,
+               }}
+               className="absolute inset-x-0 top-0 w-[3px] bg-gradient-to-t from-cyan-500 via-blue-500 to-transparent from-[0%] via-[10%] rounded-full glow-timeline"
+             />
+           )}
         </div>
       </div>
     </div>

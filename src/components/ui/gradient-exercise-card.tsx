@@ -1,5 +1,4 @@
 import { BackgroundGradient } from "@/components/ui/background-gradient";
-import React from "react";
 
 interface ExerciseCardProps {
   date: string;

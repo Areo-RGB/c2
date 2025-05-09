@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
+// import React from "react";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 
-type ParticlesProps = {
+export interface ParticlesProps {
   id?: string;
   className?: string;
   background?: string;
@@ -13,12 +13,13 @@ type ParticlesProps = {
   speed?: number;
   particleColor?: string;
   particleDensity?: number;
-};
+}
 
 // This is a placeholder version that doesn't require the tsparticles libraries
 // Replace with the full implementation once dependencies are installed
 export const SparklesCore = (props: ParticlesProps) => {
-  const { id, className, background, particleColor } = props;
+  const { className, background, particleColor } = props;
+  // id is intentionally not destructured as it's not used
 
   return (
     <motion.div

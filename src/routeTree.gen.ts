@@ -19,7 +19,6 @@ import { Route as AuthenticatedStatistikenIndexImport } from './routes/_authenti
 import { Route as AuthenticatedChatsIndexImport } from './routes/_authenticated/chats/index'
 import { Route as AuthenticatedAppsIndexImport } from './routes/_authenticated/apps/index'
 import { Route as AuthenticatedStatistikenPerformanceDashboardImport } from './routes/_authenticated/statistiken/performance-dashboard'
-import { Route as AuthenticatedChatsPlayerProgressImport } from './routes/_authenticated/chats/player-progress'
 import { Route as AuthenticatedChatsPerformanceDashboardImport } from './routes/_authenticated/chats/performance-dashboard'
 
 // Create/Update Routes
@@ -73,13 +72,6 @@ const AuthenticatedStatistikenPerformanceDashboardRoute =
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 
-const AuthenticatedChatsPlayerProgressRoute =
-  AuthenticatedChatsPlayerProgressImport.update({
-    id: '/chats/player-progress',
-    path: '/chats/player-progress',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
-
 const AuthenticatedChatsPerformanceDashboardRoute =
   AuthenticatedChatsPerformanceDashboardImport.update({
     id: '/chats/performance-dashboard',
@@ -110,13 +102,6 @@ declare module '@tanstack/react-router' {
       path: '/chats/performance-dashboard'
       fullPath: '/chats/performance-dashboard'
       preLoaderRoute: typeof AuthenticatedChatsPerformanceDashboardImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/chats/player-progress': {
-      id: '/_authenticated/chats/player-progress'
-      path: '/chats/player-progress'
-      fullPath: '/chats/player-progress'
-      preLoaderRoute: typeof AuthenticatedChatsPlayerProgressImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/statistiken/performance-dashboard': {
@@ -169,7 +154,6 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedChatsPerformanceDashboardRoute: typeof AuthenticatedChatsPerformanceDashboardRoute
-  AuthenticatedChatsPlayerProgressRoute: typeof AuthenticatedChatsPlayerProgressRoute
   AuthenticatedStatistikenPerformanceDashboardRoute: typeof AuthenticatedStatistikenPerformanceDashboardRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
@@ -182,7 +166,6 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedChatsPerformanceDashboardRoute:
     AuthenticatedChatsPerformanceDashboardRoute,
-  AuthenticatedChatsPlayerProgressRoute: AuthenticatedChatsPlayerProgressRoute,
   AuthenticatedStatistikenPerformanceDashboardRoute:
     AuthenticatedStatistikenPerformanceDashboardRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
@@ -199,7 +182,6 @@ export interface FileRoutesByFullPath {
   '': typeof AuthenticatedRouteRouteWithChildren
   '/': typeof AuthenticatedIndexRoute
   '/chats/performance-dashboard': typeof AuthenticatedChatsPerformanceDashboardRoute
-  '/chats/player-progress': typeof AuthenticatedChatsPlayerProgressRoute
   '/statistiken/performance-dashboard': typeof AuthenticatedStatistikenPerformanceDashboardRoute
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
@@ -211,7 +193,6 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/chats/performance-dashboard': typeof AuthenticatedChatsPerformanceDashboardRoute
-  '/chats/player-progress': typeof AuthenticatedChatsPlayerProgressRoute
   '/statistiken/performance-dashboard': typeof AuthenticatedStatistikenPerformanceDashboardRoute
   '/apps': typeof AuthenticatedAppsIndexRoute
   '/chats': typeof AuthenticatedChatsIndexRoute
@@ -225,7 +206,6 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/chats/performance-dashboard': typeof AuthenticatedChatsPerformanceDashboardRoute
-  '/_authenticated/chats/player-progress': typeof AuthenticatedChatsPlayerProgressRoute
   '/_authenticated/statistiken/performance-dashboard': typeof AuthenticatedStatistikenPerformanceDashboardRoute
   '/_authenticated/apps/': typeof AuthenticatedAppsIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexRoute
@@ -240,7 +220,6 @@ export interface FileRouteTypes {
     | ''
     | '/'
     | '/chats/performance-dashboard'
-    | '/chats/player-progress'
     | '/statistiken/performance-dashboard'
     | '/apps'
     | '/chats'
@@ -251,7 +230,6 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/chats/performance-dashboard'
-    | '/chats/player-progress'
     | '/statistiken/performance-dashboard'
     | '/apps'
     | '/chats'
@@ -263,7 +241,6 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/_authenticated/'
     | '/_authenticated/chats/performance-dashboard'
-    | '/_authenticated/chats/player-progress'
     | '/_authenticated/statistiken/performance-dashboard'
     | '/_authenticated/apps/'
     | '/_authenticated/chats/'
@@ -299,7 +276,6 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/",
         "/_authenticated/chats/performance-dashboard",
-        "/_authenticated/chats/player-progress",
         "/_authenticated/statistiken/performance-dashboard",
         "/_authenticated/apps/",
         "/_authenticated/chats/",
@@ -314,10 +290,6 @@ export const routeTree = rootRoute
     },
     "/_authenticated/chats/performance-dashboard": {
       "filePath": "_authenticated/chats/performance-dashboard.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/chats/player-progress": {
-      "filePath": "_authenticated/chats/player-progress.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/statistiken/performance-dashboard": {

@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { motion, stagger, useAnimate, useInView } from "motion/react";
 import { useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const TypewriterEffect = ({
   words,
@@ -16,6 +17,7 @@ export const TypewriterEffect = ({
   className?: string;
   cursorClassName?: string;
 }) => {
+  const isMobile = useIsMobile();
   // split text inside of words into array of characters
   const wordsArray = words.map((word) => {
     return {
@@ -30,19 +32,22 @@ export const TypewriterEffect = ({
     if (isInView) {
       animate(
         "span",
+        isMobile ?
+         { opacity: 1, display: "inline-block", width: "fit-content" }
+        :
         {
           display: "inline-block",
           opacity: 1,
           width: "fit-content",
         },
         {
-          duration: 0.3,
-          delay: stagger(0.1),
+          duration: isMobile ? 0.15 : 0.3,
+          delay: isMobile ? stagger(0.05) : stagger(0.1),
           ease: "easeInOut",
         }
       );
     }
-  }, [isInView]);
+  }, [isInView, animate, isMobile]);
 
   const renderWords = () => {
     return (
@@ -90,7 +95,7 @@ export const TypewriterEffect = ({
           repeatType: "reverse",
         }}
         className={cn(
-          "inline-block rounded-sm w-[4px] h-4 md:h-6 lg:h-10 bg-blue-500",
+          "inline-block rounded-sm w-[4px] h-4 sm:h-6 xl:h-12 bg-blue-500",
           cursorClassName
         )}
       ></motion.span>
@@ -173,7 +178,6 @@ export const TypewriterEffectSmooth = ({
         }}
         transition={{
           duration: 0.8,
-
           repeat: Infinity,
           repeatType: "reverse",
         }}

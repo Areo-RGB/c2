@@ -23,8 +23,10 @@ export function useErrorMemory() {
       const memory = readErrorMemory();
       setErrors(memory.errors);
       setLastUpdated(memory.lastUpdated);
-    } catch (error) {
-      console.error('Failed to load error memory:', error);
+    } catch (_error) {
+      // Set empty error state if reading fails
+      setErrors([]);
+      setLastUpdated(new Date().toISOString());
     } finally {
       setIsLoading(false);
     }

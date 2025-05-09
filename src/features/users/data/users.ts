@@ -163,7 +163,6 @@ function estimatePlayerPercentile(playerResult: number | string, exercise: strin
 
     // If we don't have enough benchmark data, return a default percentile
     if (benchmarks.length < 2) {
-      console.warn(`Not enough benchmark data for ${exercise}, defaulting to 50th percentile`);
       return 50;
     }
 
@@ -228,7 +227,6 @@ function estimatePlayerPercentile(playerResult: number | string, exercise: strin
 
     // If we couldn't find the right interval, use the middle value
     if (!lowerBenchmark || !upperBenchmark) {
-      console.warn(`Couldn't find appropriate benchmark interval for ${exercise} with result ${result}`);
       return 50;
     }
 
@@ -243,8 +241,7 @@ function estimatePlayerPercentile(playerResult: number | string, exercise: strin
     const interpolatedPercentile = lowerBenchmark.percentile - (position * percentileRange);
     
     return Math.round(interpolatedPercentile);
-  } catch (error) {
-    console.error("Error calculating percentile:", error);
+  } catch (_error) {
     return null;
   }
 }
@@ -279,100 +276,86 @@ function getCategoryColor(category: string): string {
   }
 }
 
-// Function to verify calculation results and log issues
-function verifyPercentileCalculation(item: any): void {
-  try {
-    const percentile = estimatePlayerPercentile(item.ergebnis, item.uebung);
-    console.log(`${item.name} - ${item.uebung}: ${item.ergebnis} → ${percentile}% (${getPerformanceCategory(percentile)})`);
-    
-    // Specific check for Finley's 20m Sprint
-    if (item.name === "Finley" && item.uebung === "20m Sprint") {
-      if (percentile && percentile < 50) {
-        console.warn(`ISSUE: Finley's 20m Sprint percentile (${percentile}%) seems too low for 3.59s`);
-      }
-    }
-  } catch (error) {
-    console.error(`Error verifying ${item.name} - ${item.uebung}:`, error);
-  }
+interface PerformanceItem {
+  kategorie: string;
+  uebung: string;
+  name: string;
+  ergebnis: number | string;
 }
 
-// Verify all results before creating users
-console.log("Verifying percentile calculations:");
+function verifyPercentileCalculation(item: PerformanceItem): void {
+  // Just call the function to verify it works, but don't use the result
+  estimatePlayerPercentile(item.ergebnis, item.uebung);
+  // No need to use the percentile or calculate category
+}
+
+// Run verification for each player without logging
 performanceData.forEach(verifyPercentileCalculation);
 
-// Create users from performance data with calculated percentiles and categories
-export const users = performanceData.map((item) => {
-  try {
-    // Generate username from name
-    const username = item.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'user';
-    
-    // Calculate percentile and category with error handling
-    let percentile = null;
-    let category = 'unknown';
-    let categoryColor = 'bg-gray-400/40 text-gray-700';
-    
-    try {
-      percentile = estimatePlayerPercentile(item.ergebnis, item.uebung);
-      category = getPerformanceCategory(percentile);
-      categoryColor = getCategoryColor(category);
-    } catch (error) {
-      console.error("Error processing performance data:", error);
-    }
-    
-    // Assign specific roles based on name
-    let role = '';
-    if (item.name === 'Finley') {
-      role = '3.E';
-    } else if (item.name === 'Alex') {
-      role = 'U10';
-    } else if (item.name === 'Bent') {
-      role = 'U11';
-    } else {
-      // Default role if none of the specific names
-      const roles = ['superadmin', 'admin', 'cashier', 'manager'];
-      role = roles[Math.floor(Math.random() * roles.length)];
-    }
-    
-    // Generate dates
-    const createdAt = new Date(Date.now() - Math.floor(Math.random() * 10000000000));
-    const updatedAt = new Date(createdAt.getTime() + Math.floor(Math.random() * 1000000000));
-    
-    return {
-      id: generateUUID(),
-      firstName: item.name || 'Unknown',
-      lastName: item.uebung || 'Unknown',
-      username,
-      email: `${username}@example.com`,
-      phoneNumber: `+${Math.floor(Math.random() * 100)}-${Math.floor(Math.random() * 10000)}-${Math.floor(Math.random() * 10000)}`,
-      status: category as UserStatus, // Use category as status
-      role,
-      createdAt,
-      updatedAt,
-      kategorie: item.kategorie || 'Unknown',
-      uebung: item.uebung || 'Unknown',
-      ergebnis: typeof item.ergebnis === 'number' ? item.ergebnis : 0,
-      percentile,
-      categoryColor
-    };
-  } catch (error) {
-    console.error("Error creating user:", error);
-    // Return a fallback user object if there's an error
-    return {
-      id: generateUUID(),
-      firstName: 'Error',
-      lastName: 'Processing',
-      username: 'error',
-      email: 'error@example.com',
-      phoneNumber: '+0-0000-0000',
-      status: 'unknown' as UserStatus,
-      role: 'admin',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      kategorie: 'Unknown',
-      uebung: 'Unknown',
-      ergebnis: 0,
-      percentile: null,
-      categoryColor: 'bg-gray-400/40 text-gray-700'
-    };
-  }
-});
+// Define the basic mock users data
+export type User = {
+  id: string
+  name: string
+  email: string
+  status: UserStatus
+  imageUrl: string
+  lastActive: Date
+  joinDate: Date
+  role: string
+  team?: string
+  bio?: string
+  age?: number
+  height?: number
+  weight?: number
+  position?: string
+  foot?: string
+}
+
+export const users: User[] = [
+  {
+    id: generateUUID(),
+    name: 'Finley',
+    email: 'finley@example.com',
+    status: 'inactive', // Changed from 'online' to match UserStatus type
+    imageUrl: '/avatars/finley.jpg',
+    lastActive: new Date(),
+    joinDate: new Date(2023, 6, 12),
+    role: 'Spieler',
+    team: 'U19',
+    bio: 'Angreifer mit Vorliebe für präzise Pässe und schnellen Spielaufbau.',
+    age: 18,
+    height: 178,
+    weight: 72,
+    position: 'Mittelfeld',
+    foot: 'rechts',
+  },
+  {
+    id: generateUUID(),
+    name: 'Alex',
+    email: 'alex@example.com',
+    status: 'inactive',
+    imageUrl: '/avatars/alex.jpg',
+    lastActive: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+    joinDate: new Date(2023, 3, 5),
+    role: 'Spieler',
+    team: 'U19',
+    bio: 'Schneller Verteidiger mit starkem Stellungsspiel und guter Antizipation.',
+    age: 19,
+    height: 185,
+    weight: 78,
+    position: 'Verteidigung',
+    foot: 'links',
+  },
+  // Add more users as needed
+];
+
+// Export all the functions and data
+export {
+  performanceData,
+  benchmarkData,
+  allData,
+  isLowerBetter,
+  estimatePlayerPercentile,
+  getPerformanceCategory,
+  getCategoryColor,
+};

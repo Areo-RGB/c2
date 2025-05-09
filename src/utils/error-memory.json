@@ -55,7 +55,14 @@
       "context": "When navigating to a route in TanStack Router application, the page only shows the route path text (e.g. \"/_authenticated/chats/player-progress\") instead of rendering the actual component.",
       "solution": "Verify the component has the correct order of Route export and component definition. Component should be defined before the Route export or include Route definition at the end of the file. Ensure the component is being properly passed to createFileRoute and is correctly implemented.",
       "timestamp": "2024-05-09T12:00:00Z"
+    },
+    {
+      "id": "err-009",
+      "description": "backdrop-filter CSS property compatibility issues",
+      "context": "When implementing Windows Aero-style glass effects with backdrop-filter in a web application, some browsers may not support it or have inconsistent rendering",
+      "solution": "Always include the -webkit-backdrop-filter prefix for Safari support. Consider feature detection (using @supports or JavaScript) and provide graceful fallbacks like solid backgrounds with opacity for browsers that don't support backdrop-filter. Test on various browsers, particularly older versions of Edge and Safari.",
+      "timestamp": "2024-05-26T10:00:00Z"
     }
   ],
-  "lastUpdated": "2024-05-09T12:00:00Z"
+  "lastUpdated": "2024-05-26T10:00:00Z"
 } 

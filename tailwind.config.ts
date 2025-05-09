@@ -1,5 +1,7 @@
 import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const animate = require('tailwindcss-animate')
 
 const config = {
   darkMode: 'class',
@@ -40,7 +42,7 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [animate],
 } satisfies Config
 
 export default config 

@@ -17,7 +17,7 @@ export function readMemory(): ErrorMemory {
   try {
     const data = fs.readFileSync(ERROR_MEMORY_PATH, 'utf8');
     return JSON.parse(data) as ErrorMemory;
-  } catch (error) {
+  } catch (_error) {
     // If file doesn't exist or has invalid JSON, return empty error memory
     return {
       errors: [],

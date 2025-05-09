@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { motion, MotionStyle, Transition } from "motion/react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface BorderBeamProps {
   /**
@@ -56,6 +57,12 @@ export const BorderBeam = ({
   style,
   reverse = false,
 }: BorderBeamProps) => {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return null;
+  }
+
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]">
       <motion.div

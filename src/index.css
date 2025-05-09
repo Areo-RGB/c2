@@ -4,141 +4,134 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Default (Light Mode) - Refined for modern minimal Aero */
   --radius: 0.5rem;
-  --background: oklch(0.985 0.005 90); /* Softer off-white */
-  --foreground: oklch(0.2 0.015 240); /* Dark, slightly desaturated cool blue-gray */
-  
-  --card: oklch(1 0 0); /* Pure white */
-  --card-foreground: oklch(0.2 0.015 240); /* Consistent with main foreground */
-  
-  --popover: oklch(1 0 0); /* Pure white */
-  --popover-foreground: oklch(0.2 0.015 240); /* Consistent with main foreground */
-  
-  --primary: oklch(0.52 0.18 255); /* Vibrant Blue */
-  --primary-foreground: oklch(0.98 0.01 250); /* Very light, almost white, slightly cool */
-  
-  --secondary: oklch(0.92 0.02 240); /* Light cool gray-blue */
-  --secondary-foreground: oklch(0.35 0.08 250); /* Darker blue for text on secondary */
-  
-  --muted: oklch(0.96 0.01 230); /* Very light cool gray */
-  --muted-foreground: oklch(0.45 0.02 240); /* Medium gray-blue for less important text */
-  
-  --accent: oklch(0.94 0.025 245); /* Light, slightly saturated blue-gray for hovers/active */
-  --accent-foreground: oklch(0.25 0.06 250); /* Darker blue for text on accent */
-  
-  --destructive: oklch(0.63 0.22 25); /* Clear, slightly desaturated red */
-  --destructive-foreground: oklch(0.98 0.01 20); /* Very light, slightly warm for text on destructive */
-  
-  --border: oklch(0.9 0.015 230); /* Subtle cool gray border */
-  --input: oklch(0.97 0.01 240); /* Very light cool gray for input backgrounds */
-  --ring: oklch(0.52 0.18 255 / 0.4); /* Primary blue with alpha for focus rings */
-  
-  --chart-1: oklch(0.81 0.17 75.35);
-  --chart-2: oklch(0.55 0.22 264.53);
-  --chart-3: oklch(0.72 0 0);
-  --chart-4: oklch(0.92 0 0);
-  --chart-5: oklch(0.56 0 0);
+  --background: oklch(0.98 0 0); /* Very light base page background */
+  --foreground: oklch(0.05 0 0); /* Near black for strong contrast */
 
-  /* Sidebar specific variables for light mode */
-  --sidebar: oklch(0.97 0.015 230); /* Light cool gray, distinct from main background */
-  --sidebar-foreground: oklch(0.25 0.02 240); /* Darker text for sidebar */
-  --sidebar-primary: oklch(0.52 0.18 255); /* Same as main primary */
-  --sidebar-primary-foreground: oklch(0.98 0.01 250); /* Same as main primary foreground */
-  --sidebar-accent: oklch(0.90 0.03 245); /* Slightly darker/more saturated accent for sidebar items */
-  --sidebar-accent-foreground: oklch(0.2 0.05 250); /* Darker blue for text on sidebar accent */
-  --sidebar-border: oklch(0.88 0.015 230); /* Border for sidebar internal elements or sidebar itself */
-  --sidebar-ring: oklch(0.52 0.18 255 / 0.4); /* Same as main ring */
-  
-  /* Unchanged variables from original */
+  /* Aero Glass Colors & Blur */
+  /* Define transparent white for surfaces */
+  --light-aero-bg: oklch(0.99 0 0 / 0.8); 
+  /* Define semi-transparent border */
+  --light-aero-border: oklch(0.85 0 0 / 0.5); 
+  /* Define blur amount */
+  --aero-blur: 16px; 
+
+  /* Shadcn Components - Base Colors (overridden by .light below for aero effect) */
+  /* These values act as defaults, but will be explicitly set with transparency/blur in .light */
+  --card: oklch(0.99 0 0);
+  --card-foreground: oklch(0.08 0 0);
+  --popover: oklch(0.99 0 0);
+  --popover-foreground: oklch(0.08 0 0);
+  --primary: oklch(0.1 0 0); /* Darker primary for contrast on light */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0.15 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.44 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0.15 0 0);
+  --destructive: oklch(0.63 0.19 23.03);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.92 0 0); /* Base border */
+  --input: oklch(0.96 0 0); /* Lighter input background */
+  --ring: oklch(0.6 0 0); /* Softer ring */
+
+  --sidebar: oklch(0.99 0 0);
+  --sidebar-foreground: oklch(0.08 0 0);
+  --sidebar-primary: oklch(0.1 0 0);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.94 0 0);
+  --sidebar-accent-foreground: oklch(0.15 0 0);
+  --sidebar-border: oklch(0.94 0 0);
+  --sidebar-ring: oklch(0.6 0 0);
+
+  /* Shadows - Softer and lifted in Light Mode */
+  --shadow-color: 0 0% 0%; /* Black shadows */
+  --shadow-opacity: 0.1; /* Reduced opacity */
+  --shadow-blur: 10px; /* Increased blur for softness */
+  --shadow-spread: 0px;
+  --shadow-offset-x: 0px;
+  --shadow-offset-y: 4px; /* Increased vertical offset for lift */
+
+  --shadow-2xs: 0px 1px 2px 0px hsl(var(--shadow-color) / calc(var(--shadow-opacity) * 0.3)); 
+  --shadow-xs: 0px 2px 4px -1px hsl(var(--shadow-color) / calc(var(--shadow-opacity) * 0.5));
+  --shadow-sm: 0px 4px 6px -1px hsl(var(--shadow-color) / var(--shadow-opacity));
+  --shadow-md: 0px 5px 15px 0px hsl(var(--shadow-color) / calc(var(--shadow-opacity) * 1.2));
+  --shadow-lg: 0px 10px 20px -2px hsl(var(--shadow-color) / calc(var(--shadow-opacity) * 1.5));
+  --shadow-xl: 0px 20px 25px -5px hsl(var(--shadow-color) / calc(var(--shadow-opacity) * 2));
+  --shadow-2xl: 0px 25px 50px -12px hsl(var(--shadow-color) / calc(var(--shadow-opacity) * 2.5));
+
+
+  /* ... other variables like font families, spacing, tracking ... */
   --font-sans: Geist, sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Geist Mono, monospace;
-  --shadow-color: hsl(0 0% 0%);
-  --shadow-opacity: 0.18;
-  --shadow-blur: 2px;
-  --shadow-spread: 0px;
-  --shadow-offset-x: 0px;
-  --shadow-offset-y: 1px;
   --letter-spacing: 0em;
   --spacing: 0.25rem;
-  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.09);
-  --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.09);
-  --shadow-sm: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 1px 2px -1px hsl(0 0% 0% / 0.18);
-  --shadow: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 1px 2px -1px hsl(0 0% 0% / 0.18);
-  --shadow-md: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 2px 4px -1px hsl(0 0% 0% / 0.18);
-  --shadow-lg: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 4px 6px -1px hsl(0 0% 0% / 0.18);
-  --shadow-xl: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 8px 10px -1px hsl(0 0% 0% / 0.18);
-  --shadow-2xl: 0px 1px 2px 0px hsl(0 0% 0% / 0.45);
   --tracking-normal: 0em;
 }
 
 .dark {
-  --background: oklch(0.12 0.015 240); /* Very dark cool blue-gray */
-  --foreground: oklch(0.92 0.01 240); /* Light cool gray for text */
+  /* Keep existing dark mode variables as they are */
+  --background: oklch(0.12 0.015 240);
+  --foreground: oklch(0.92 0.01 240);
 
-  --card: oklch(0.17 0.015 240);      /* Slightly lighter dark cool blue-gray for cards */
-  --card-foreground: oklch(0.92 0.01 240); /* Consistent with main foreground */
+  --card: oklch(0.17 0.015 240);
+  --card-foreground: oklch(0.92 0.01 240);
 
-  --popover: oklch(0.20 0.02 240);    /* A bit lighter than card for popovers, more elevation */
-  --popover-foreground: oklch(0.95 0.01 240); /* Slightly brighter text for popovers */
+  --popover: oklch(0.20 0.02 240);
+  --popover-foreground: oklch(0.95 0.01 240);
 
-  --primary: oklch(0.60 0.20 255);    /* Vibrant Blue, adjusted for dark mode visibility */
-  --primary-foreground: oklch(0.98 0.01 250); /* Very light, almost white for text on primary */
+  --primary: oklch(0.60 0.20 255);
+  --primary-foreground: oklch(0.98 0.01 250);
 
-  --secondary: oklch(0.28 0.025 245); /* Darker, slightly muted blue-gray for secondary actions */
-  --secondary-foreground: oklch(0.9 0.015 240); /* Light gray for text on secondary */
+  --secondary: oklch(0.28 0.025 245);
+  --secondary-foreground: oklch(0.9 0.015 240);
 
-  --muted: oklch(0.22 0.015 230);    /* Dark gray for muted elements */
-  --muted-foreground: oklch(0.65 0.02 240); /* Softer gray for muted text */
+  --muted: oklch(0.22 0.015 230);
+  --muted-foreground: oklch(0.65 0.02 240);
 
-  --accent: oklch(0.35 0.03 250);     /* Muted blue for hover/active states, noticeable but not overly bright */
-  --accent-foreground: oklch(0.95 0.01 245); /* Light text on accent */
+  --accent: oklch(0.35 0.03 250);
+  --accent-foreground: oklch(0.95 0.01 245);
   
-  --destructive: oklch(0.65 0.23 25);   /* Red, brightened for dark mode visibility */
-  --destructive-foreground: oklch(0.98 0.01 20); /* Very light text for contrast on destructive */
+  --destructive: oklch(0.65 0.23 25);
+  --destructive-foreground: oklch(0.98 0.01 20);
   
-  --border: oklch(0.25 0.015 235);    /* Subtle border, slightly lighter than surfaces */
-  --input: oklch(0.23 0.02 240);     /* Dark gray for input backgrounds, distinct from cards */
-  --ring: oklch(0.60 0.20 255 / 0.5);    /* Primary blue with alpha for focus rings */
+  --border: oklch(0.25 0.015 235);
+  --input: oklch(0.23 0.02 240);
+  --ring: oklch(0.60 0.20 255 / 0.5);
 
-  --chart-1: oklch(0.81 0.17 75.35); /* Keeping chart colors vibrant */
-  --chart-2: oklch(0.62 0.22 260);  /* Adjusted for better contrast */
-  --chart-3: oklch(0.70 0.03 220);  /* Softer blue-gray for less emphasis */
-  --chart-4: oklch(0.50 0.02 230);  /* Medium dark gray */
-  --chart-5: oklch(0.92 0.01 240);  /* Light gray for contrast */
+  --chart-1: oklch(0.81 0.17 75.35);
+  --chart-2: oklch(0.62 0.22 260);
+  --chart-3: oklch(0.70 0.03 220);
+  --chart-4: oklch(0.50 0.02 230);
+  --chart-5: oklch(0.92 0.01 240);
 
-  /* Sidebar specific variables for dark mode */
-  --sidebar: oklch(0.15 0.015 240);    /* Slightly darker/distinct from card for sidebar base */
-  --sidebar-foreground: oklch(0.88 0.01 240); /* Light gray text for sidebar */
-  --sidebar-primary: oklch(0.60 0.20 255); /* Primary blue for sidebar actions */
-  --sidebar-primary-foreground: oklch(0.98 0.01 250); /* Text on sidebar primary */
-  --sidebar-accent: oklch(0.30 0.03 250); /* Muted blue accent for sidebar hover/active */
-  --sidebar-accent-foreground: oklch(0.95 0.01 245); /* Text on sidebar accent */
-  --sidebar-border: oklch(0.28 0.02 240);   /* Subtle border for sidebar internal elements */
-  --sidebar-ring: oklch(0.60 0.20 255 / 0.5); /* Ring color for sidebar focus */
-  
-  /* --- Unchanged variables from original dark mode --- */
-  --radius: 0.5rem;
-  --font-sans: Geist, sans-serif;
-  --font-serif: Georgia, serif;
-  --font-mono: Geist Mono, monospace;
-  --shadow-color: hsl(0 0% 0%); /* Shadows become less impactful in dark mode, but let's keep definition */
-  --shadow-opacity: 0.25; /* Slightly increased opacity for visibility on dark surfaces */
+  /* Sidebar specific variables */
+  --sidebar: oklch(0.15 0.015 240);
+  --sidebar-foreground: oklch(0.88 0.01 240);
+  --sidebar-primary: oklch(0.60 0.20 255);
+  --sidebar-primary-foreground: oklch(0.98 0.01 250);
+  --sidebar-accent: oklch(0.30 0.03 250);
+  --sidebar-accent-foreground: oklch(0.95 0.01 245);
+  --sidebar-border: oklch(0.28 0.02 240);
+  --sidebar-ring: oklch(0.60 0.20 255 / 0.5);
+
+  /* Shadows - Reverted to original for dark mode */
+  --shadow-color: 0 0% 0%;
+  --shadow-opacity: 0.25;
   --shadow-blur: 3px;
   --shadow-spread: 0px;
   --shadow-offset-x: 0px;
-  --shadow-offset-y: 2px; /* Slightly more offset for a bit more lift */
-  --letter-spacing: 0em;
-  --spacing: 0.25rem;
-  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.15); /* Adjusted shadow intensities */
+  --shadow-offset-y: 2px;
+  --shadow-2xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.15);
   --shadow-xs: 0px 1px 2px 0px hsl(0 0% 0% / 0.15);
   --shadow-sm: 0px 1px 3px 0px hsl(0 0% 0% / 0.20), 0px 1px 2px -1px hsl(0 0% 0% / 0.20);
-  --shadow: 0px 2px 4px 0px hsl(0 0% 0% / 0.20), 0px 1px 3px -1px hsl(0 0% 0% / 0.20);
   --shadow-md: 0px 3px 5px 0px hsl(0 0% 0% / 0.20), 0px 2px 4px -2px hsl(0 0% 0% / 0.20);
   --shadow-lg: 0px 5px 7px -1px hsl(0 0% 0% / 0.20), 0px 3px 5px -2px hsl(0 0% 0% / 0.20);
   --shadow-xl: 0px 8px 10px -2px hsl(0 0% 0% / 0.20), 0px 4px 6px -3px hsl(0 0% 0% / 0.20);
   --shadow-2xl: 0px 12px 15px -3px hsl(0 0% 0% / 0.25);
-  --tracking-normal: 0em;
 }
 
 @theme inline {
@@ -219,7 +212,9 @@
     @apply overflow-x-hidden;
   }
   body {
-    @apply bg-background text-foreground min-h-svh w-full;
+    /* Use the root background variable which is solid in light mode */
+    background-color: var(--background);
+    @apply text-foreground min-h-svh w-full;
     letter-spacing: var(--tracking-normal);
   }
 
@@ -236,6 +231,132 @@
       font-size: 16px !important;
     }
   }
+
+  /* Apply aero effect only in light mode to specific elements */
+  .light {
+      /* Target elements by data-slot or specific class names that use Shadcn backgrounds */
+      /* Card backgrounds */
+      [data-slot="card"],
+      [data-slot="card"] .bg-card {
+          background-color: var(--light-aero-bg);
+          backdrop-filter: blur(var(--aero-blur));
+          -webkit-backdrop-filter: blur(var(--aero-blur)); /* Add webkit prefix */
+          border-color: var(--light-aero-border); /* Apply subtle border */
+      }
+      /* Popover/Dropdown/Select content backgrounds */
+      [data-slot="popover-content"],
+      [data-slot="dropdown-menu-content"],
+      [data-slot="select-content"],
+      .bg-popover {
+          background-color: var(--light-aero-bg);
+          backdrop-filter: blur(calc(var(--aero-blur) * 0.75)); /* Slightly less blur */
+          -webkit-backdrop-filter: blur(calc(var(--aero-blur) * 0.75));
+          border-color: var(--light-aero-border);
+      }
+      /* Dialog/Sheet content backgrounds */
+      [data-slot="dialog-content"],
+      [data-slot="sheet-content"] {
+         background-color: var(--light-aero-bg);
+         backdrop-filter: blur(var(--aero-blur));
+         -webkit-backdrop-filter: blur(var(--aero-blur));
+         border-color: var(--light-aero-border);
+      }
+       /* Target sidebar specifically, which uses bg-sidebar */
+       [data-slot="sidebar-inner"] { /* Target the inner part which gets the background */
+           background-color: var(--light-aero-bg);
+           backdrop-filter: blur(var(--aero-blur));
+           -webkit-backdrop-filter: blur(var(--aero-blur));
+           border-color: var(--light-aero-border);
+       }
+
+       /* Make other relevant element backgrounds semi-transparent as well */
+       /* These often appear within cards or other containers */
+       .bg-secondary {
+           background-color: oklch(0.94 0 0 / 0.7);
+           backdrop-filter: blur(8px);
+           -webkit-backdrop-filter: blur(8px);
+           border-color: oklch(0.85 0 0 / 0.3);
+       }
+       .bg-muted {
+           background-color: oklch(0.97 0 0 / 0.5);
+           backdrop-filter: blur(4px);
+           -webkit-backdrop-filter: blur(4px);
+            border-color: oklch(0.9 0 0 / 0.4);
+       }
+       .bg-accent {
+           background-color: oklch(0.94 0 0 / 0.7);
+           backdrop-filter: blur(8px);
+           -webkit-backdrop-filter: blur(8px);
+           border-color: oklch(0.85 0 0 / 0.3);
+       }
+
+       /* Button outlines should also be semi-transparent */
+       .light .border, 
+       .light .border-input {
+           border-color: oklch(0.85 0 0 / 0.5);
+       }
+        .light .border-dashed {
+            border-color: oklch(0.85 0 0 / 0.3);
+        }
+
+
+       /* Text color adjustments if needed for contrast */
+        .text-card-foreground, .text-popover-foreground, .text-foreground, .text-sidebar-foreground {
+            /* Ensure text remains readable on transparent backgrounds */
+            /* Currently they use solid foreground colors, which should be fine */
+        }
+
+        /* Reduce blur and increase opacity on mobile for performance */
+        @media (max-width: 767px) {
+             [data-slot="card"], .bg-card,
+             [data-slot="dialog-content"], [data-slot="sheet-content"],
+             [data-slot="sidebar-inner"] {
+                 backdrop-filter: blur(8px); /* Reduced blur */
+                 -webkit-backdrop-filter: blur(8px);
+                 background-color: oklch(0.99 0 0 / 0.9); /* Slightly less transparent */
+             }
+             [data-slot="popover-content"], [data-slot="dropdown-menu-content"], [data-slot="select-content"], .bg-popover {
+                 backdrop-filter: blur(6px); /* Reduced blur */
+                 -webkit-backdrop-filter: blur(6px);
+                 background-color: oklch(0.99 0 0 / 0.9); /* Slightly less transparent */
+             }
+             .bg-secondary, .bg-muted, .bg-accent {
+                 backdrop-filter: blur(4px); /* Reduced blur */
+                 -webkit-backdrop-filter: blur(4px);
+             }
+        }
+   }
+
+   /* Ensure dark mode elements do NOT have backdrop-filter unless explicitly styled */
+    .dark {
+        /* Explicitly remove backdrop-filter and reset background-color to theme variable */
+        [data-slot="card"], .bg-card,
+        [data-slot="popover-content"], [data-slot="dropdown-menu-content"], [data-slot="select-content"], .bg-popover,
+        [data-slot="dialog-content"], [data-slot="sheet-content"],
+        [data-slot="sidebar-inner"], .bg-sidebar,
+        .bg-secondary, .bg-muted, .bg-accent, .bg-primary,
+        .border, .border-input, .border-dashed { /* Also reset borders in dark mode */
+            background-color: unset !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            border-color: unset !important; /* Reset border color */
+        }
+
+        /* Restore dark mode specific backgrounds */
+        [data-slot="card"], .bg-card { @apply bg-card; }
+        [data-slot="popover-content"], [data-slot="dropdown-menu-content"], [data-slot="select-content"], .bg-popover { @apply bg-popover; }
+        /* Dialog/Sheet use bg-background */
+        [data-slot="dialog-content"], [data-slot="sheet-content"], .bg-background { @apply bg-background; }
+        /* Sidebar uses bg-sidebar */
+        [data-slot="sidebar-inner"], .bg-sidebar { @apply bg-sidebar; }
+        .bg-secondary { @apply bg-secondary; }
+        .bg-muted { @apply bg-muted; }
+        .bg-accent { @apply bg-accent; }
+        .bg-primary { @apply bg-primary; }
+        .border { @apply border; }
+        .border-input { @apply border-input; }
+        .border-dashed { @apply border-dashed; }
+    }
 }
 
 @utility container {
@@ -284,6 +405,23 @@
   to {
     height: 0;
   }
+}
+
+/* Custom glow styles for Timeline component - Keep these as they are */
+.glow-effect {
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 15px rgba(6, 182, 212, 0.3);
+}
+.glow-timeline {
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5), 0 0 20px rgba(6, 182, 212, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out forwards;
 }
 
 @layer base {

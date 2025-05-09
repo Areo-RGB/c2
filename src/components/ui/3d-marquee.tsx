@@ -2,6 +2,8 @@
 
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
+
 export const ThreeDMarquee = ({
   images,
   className,
@@ -9,12 +11,36 @@ export const ThreeDMarquee = ({
   images: string[];
   className?: string;
 }) => {
+  const isMobile = useIsMobile();
   // Split the images array into 4 equal parts
   const chunkSize = Math.ceil(images.length / 4);
   const chunks = Array.from({ length: 4 }, (_, colIndex) => {
     const start = colIndex * chunkSize;
     return images.slice(start, start + chunkSize);
   });
+
+  // If on mobile, render a simplified static grid
+  if (isMobile) {
+    return (
+      <div className={cn("h-full w-full overflow-hidden", className)}>
+        <div className="grid grid-cols-2 gap-4 p-4">
+          {images.slice(0, 6).map((image, index) => (
+            <div key={index + "static-marquee"} className="relative rounded-lg overflow-hidden">
+               <img
+                src={image}
+                alt={`Image ${index + 1}`}
+                className="aspect-[970/700] w-full h-auto object-cover ring ring-gray-950/5"
+                width={485}
+                height={350}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop rendering with animations
   return (
     <div
       className={cn(
